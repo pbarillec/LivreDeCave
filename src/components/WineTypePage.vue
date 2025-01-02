@@ -1,9 +1,21 @@
 <template>
     <div>
-        <h1>Type</h1>
-        <p>Type de vin!</p>
+        <button @click="goBack">⬅️ Retour</button>
+        <h1>Vins de type : {{ type }}</h1>
+        <p>Voici la liste des vins de ce type (à venir).</p>
     </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
+
+const router = useRouter();
+const route = useRoute();
+
+const type = ref(route.params.type);
+
+const goBack = () => {
+    router.back(); // Navigue vers la page précédente
+};
 </script>

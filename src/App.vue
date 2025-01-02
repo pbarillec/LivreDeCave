@@ -1,7 +1,8 @@
 <template>
+  <NavigationMenu />
   <router-view />
 </template>
 
 <script setup lang="ts">
-console.log("App.vue chargé !");
+import NavigationMenu from "./components/NavigationMenu.vue";
 </script>
