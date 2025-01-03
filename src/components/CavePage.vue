@@ -42,25 +42,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
+import { ref, computed } from "vue";
+import { Wine } from "../models/Wine";
 
-const wines = ref([]);
-wines.value = [
-    {
-        id: 1,
-        name: "Château Margaux",
-        appellation: "Margaux",
-        producer: "Château Margaux",
-        color: "Red",
-        vintage: 2015,
-        purchaseDate: "2023-11-01",
-        purchasePrice: 250,
-        bottleSize: 750,
-        quantityBought: 6,
-        quantityLeft: 6,
-        peak: "2025-2030",
-        notes: "A great wine.",
-    },
+const wines = ref<Wine[]>([]); 
+    wines.value = [
+    new Wine(1, "Château Margaux", "Margaux", "Château Margaux", "Red", 2015, "2023-11-01", 250, 750, 6, 6, "2025-2030", "Un vin exceptionnel."),
+    new Wine(2, "Petrus", "Pomerol", "Petrus Estate", "Red", 2018, "2023-12-01", 3000, 750, 3, 3, "2030-2040", "Un vin légendaire."),
+    new Wine(3, "Domaine de la Romanée-Conti", "Romanée-Conti", "Domaine de la Romanée-Conti", "Red", 2017, "2024-01-10", 15000, 750, 1, 1, "2035-2045", "Chef-d'œuvre rare."),
+    new Wine(4, "Château d'Yquem", "Sauternes", "Château d'Yquem", "White", 2010, "2022-05-20", 400, 750, 12, 10, "2020-2035", "Un grand vin moelleux."),
+    new Wine(5, "Château Lafite Rothschild", "Pauillac", "Château Lafite Rothschild", "Red", 2016, "2023-08-15", 800, 750, 5, 4, "2028-2040", "Puissant et élégant."),
+    new Wine(6, "Château Latour", "Pauillac", "Château Latour", "Red", 2014, "2023-09-10", 650, 750, 8, 8, "2025-2035", "Solide et structuré."),
+    new Wine(7, "Château Mouton Rothschild", "Pauillac", "Château Mouton Rothschild", "Red", 2019, "2024-02-28", 750, 750, 6, 6, "2030-2040", "Harmonieux avec une grande finesse."),
+    new Wine(8, "Domaine Leflaive", "Puligny-Montrachet", "Domaine Leflaive", "White", 2020, "2023-10-01", 350, 750, 4, 4, "2025-2030", "Frais et élégant."),
+    new Wine(9, "Château Cheval Blanc", "Saint-Émilion", "Château Cheval Blanc", "Red", 2018, "2023-07-14", 950, 750, 7, 5, "2025-2040", "Un équilibre remarquable."),
+    new Wine(10, "Château Haut-Brion", "Pessac-Léognan", "Château Haut-Brion", "Red", 2015, "2023-03-22", 600, 750, 6, 6, "2025-2035", "Complexe et raffiné."),
 ];
 
 const winesComputed = computed(() => wines.value);
