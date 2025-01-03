@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import { createRouter, createWebHistory } from "vue-router";
+import "./styles/tailwind.css";
 
 // Définition des routes
 const routes = [
