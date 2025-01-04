@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 import App from './App.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import './styles/tailwind.css';
@@ -24,5 +25,6 @@ const router = createRouter({
 
 // Création de l'application Vue
 const app = createApp(App);
+app.use(createPinia());
 app.use(router);
 app.mount('#app');

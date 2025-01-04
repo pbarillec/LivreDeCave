@@ -31,6 +31,7 @@
                         Appellation
                     </th>
                     <th class="border border-gray-300 px-4 py-2">Producteur</th>
+                    <th class="border border-gray-300 px-4 py-2">Vignoble</th>
                     <th class="border border-gray-300 px-4 py-2">Couleur</th>
                     <th class="border border-gray-300 px-4 py-2 w-20">
                         Millésime
@@ -81,6 +82,9 @@
                     </td>
                     <td class="border border-gray-300 px-4 py-2">
                         {{ wine.producer }}
+                    </td>
+                    <td class="border border-gray-300 px-4 py-2">
+                        {{ wine.wineType }}
                     </td>
                     <td class="border border-gray-300 px-4 py-2">
                         {{ wine.color }}
