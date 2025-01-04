@@ -2,49 +2,6 @@
     <div>
         <div class="bg-paper text-ink min-h-screen p-4">
             <h1 class="text-4xl font-serif">Ma Cave</h1>
-            <p class="text-lg">Bienvenue dans votre livre de cave.</p>
-            <!-- <button @click="toggleFilters" class="bg-blue-500 text-white px-4 py-2 rounded shadow">
-                {{ showFilters ? 'Fermer' : 'Filtrer / Trier' }}
-            </button>
-            <div v-if="showFilters" class="border border-gray-300 bg-gray-50 p-4 mt-2 rounded">
-                <h2 class="text-lg font-bold">Options de tri</h2>
-                <label>
-                    Colonne :
-                    <select v-model="sortColumn" class="border border-gray-300 rounded px-2 py-1">
-                        <option value="name">Nom</option>
-                        <option value="vintage">Millésime</option>
-                        <option value="purchasePrice">Prix d'achat</option>
-                        <option value="quantityLeft">Quantité Restante</option>
-                    </select>
-                </label>
-                <div class="mt-2">
-                    <label>
-                        <input type="radio" value="asc" v-model="sortOrder" />
-                        Ascendant
-                    </label>
-                    <label class="ml-4">
-                        <input type="radio" value="desc" v-model="sortOrder" />
-                        Descendant
-                    </label>
-                </div>
-
-                <h2 class="text-lg font-bold mt-4">Filtres</h2>
-                <label>
-                    Couleur :
-                    <select v-model="filterColor" class="border border-gray-300 rounded px-2 py-1">
-                        <option value="">Toutes</option>
-                        <option value="Rouge">Rouge</option>
-                        <option value="Blanc">Blanc</option>
-                        <option value="Rosé">Rosé</option>
-                    </select>
-                </label>
-                <label class="ml-4">
-                    Millésime :
-                    <input type="number" v-model="filterVintage" class="border border-gray-300 rounded px-2 py-1" />
-                </label>
-
-                <button @click="resetFilters" class="bg-red-500 text-white px-4 py-2 rounded mt-4 ml-2">Réinitialiser</button>
-            </div> -->
 
             <!-- Composant de tri et filtre -->
             <SortAndFilterComponent
@@ -52,110 +9,17 @@
                 @update-data="updateFilteredAndSortedWines"
             />
 
-            <!-- Tableau -->
-            <table
-                class="table-auto w-full border-collapse border border-gray-300 mt-4"
-            >
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="border border-gray-300 px-4 py-2">Nom</th>
-                        <th class="border border-gray-300 px-4 py-2">
-                            Appellation
-                        </th>
-                        <th class="border border-gray-300 px-4 py-2">
-                            Producteur
-                        </th>
-                        <th class="border border-gray-300 px-4 py-2">
-                            Couleur
-                        </th>
-                        <th class="border border-gray-300 px-4 py-2 w-20">
-                            Millésime
-                        </th>
-                        <th class="border border-gray-300 px-4 py-2 w-32">
-                            Date d'achat
-                        </th>
-                        <th class="border border-gray-300 px-4 py-2 w-28">
-                            Prix d'achat
-                        </th>
-                        <th class="border border-gray-300 px-4 py-2 w-28">
-                            Contenance
-                        </th>
-                        <th class="border border-gray-300 px-4 py-2 w-20">
-                            Quantité achetée
-                        </th>
-                        <th class="border border-gray-300 px-4 py-2 w-20">
-                            Quantité Restante
-                        </th>
-                        <th class="border border-gray-300 px-4 py-2 w-36">
-                            Apogée
-                        </th>
-                        <th class="border border-gray-300 px-4 py-2">
-                            Commentaires
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-if="filteredAndSortedWines.length === 0">
-                        <td
-                            colspan="12"
-                            class="text-center text-gray-500 italic py-4"
-                        >
-                            Aucun vin dans la cave pour le moment.
-                        </td>
-                    </tr>
-                    <tr
-                        v-else
-                        v-for="wine in filteredAndSortedWines"
-                        :key="wine.id"
-                        class="odd:bg-white even:bg-gray-100"
-                    >
-                        <td class="border border-gray-300 px-4 py-2">
-                            {{ wine.name }}
-                        </td>
-                        <td class="border border-gray-300 px-4 py-2">
-                            {{ wine.appellation }}
-                        </td>
-                        <td class="border border-gray-300 px-4 py-2">
-                            {{ wine.producer }}
-                        </td>
-                        <td class="border border-gray-300 px-4 py-2">
-                            {{ wine.color }}
-                        </td>
-                        <td class="border border-gray-300 px-4 py-2">
-                            {{ wine.vintage }}
-                        </td>
-                        <td class="border border-gray-300 px-4 py-2">
-                            {{ wine.purchaseDate }}
-                        </td>
-                        <td class="border border-gray-300 px-4 py-2">
-                            {{ wine.purchasePrice }}
-                        </td>
-                        <td class="border border-gray-300 px-4 py-2">
-                            {{ wine.bottleSize }}
-                        </td>
-                        <td class="border border-gray-300 px-4 py-2">
-                            {{ wine.quantityBought }}
-                        </td>
-                        <td class="border border-gray-300 px-4 py-2">
-                            {{ wine.quantityLeft }}
-                        </td>
-                        <td class="border border-gray-300 px-4 py-2">
-                            {{ wine.peak }}
-                        </td>
-                        <td class="border border-gray-300 px-4 py-2">
-                            {{ wine.notes }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <!-- Tableau des vins -->
+            <WineTable :wines="filteredAndSortedWines" />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-    import { ref, computed } from 'vue';
+    import { ref } from 'vue';
     import { Wine } from '../models/Wine';
     import SortAndFilterComponent from './SortAndFilterComponent.vue';
+    import WineTable from './WineTable.vue';
 
     const wines = ref<Wine[]>([]);
     wines.value = [
@@ -172,7 +36,8 @@
             6,
             6,
             '2025-2030',
-            'Un vin exceptionnel.'
+            'Un vin exceptionnel.',
+            'Bordeaux'
         ),
         new Wine(
             2,
@@ -187,7 +52,8 @@
             3,
             3,
             '2030-2040',
-            'Un vin légendaire.'
+            'Un vin légendaire.',
+            'Bordeaux'
         ),
         new Wine(
             3,
@@ -202,7 +68,8 @@
             1,
             1,
             '2035-2045',
-            "Chef-d'œuvre rare."
+            "Chef-d'œuvre rare.",
+            'Loire'
         ),
         new Wine(
             4,
@@ -217,7 +84,8 @@
             12,
             10,
             '2020-2035',
-            'Un grand vin moelleux.'
+            'Un grand vin moelleux.',
+            'Alsace'
         ),
         new Wine(
             5,
@@ -232,7 +100,8 @@
             5,
             4,
             '2028-2040',
-            'Puissant et élégant.'
+            'Puissant et élégant.',
+            'Provence'
         ),
         new Wine(
             6,
@@ -247,7 +116,8 @@
             8,
             8,
             '2025-2035',
-            'Solide et structuré.'
+            'Solide et structuré.',
+            'Côote du Rhône'
         ),
         new Wine(
             7,
@@ -262,7 +132,8 @@
             6,
             6,
             '2030-2040',
-            'Harmonieux avec une grande finesse.'
+            'Harmonieux avec une grande finesse.',
+            'Bourgogne'
         ),
         new Wine(
             8,
@@ -277,7 +148,8 @@
             4,
             4,
             '2025-2030',
-            'Frais et élégant.'
+            'Frais et élégant.',
+            'Bourgogne'
         ),
         new Wine(
             9,
@@ -292,7 +164,8 @@
             7,
             5,
             '2025-2040',
-            'Un équilibre remarquable.'
+            'Un équilibre remarquable.',
+            'Bordeaux'
         ),
         new Wine(
             10,
@@ -307,7 +180,8 @@
             6,
             6,
             '2025-2035',
-            'Complexe et raffiné.'
+            'Complexe et raffiné.',
+            'Divers'
         ),
     ];
 
@@ -345,53 +219,4 @@
 
         filteredAndSortedWines.value = result;
     };
-
-    // const winesComputed = computed(() => wines.value);
-
-    // // États pour le tri et les filtres
-    // const showFilters = ref(false);
-    // const sortColumn = ref<keyof Wine>('name'); // Assure que c'est une clé valide de Wine
-    // const sortOrder = ref<'asc' | 'desc'>('asc');
-    // const filterColor = ref('');
-    // const filterVintage = ref<number | null>(null);
-
-    // const toggleFilters = () => {
-    //     showFilters.value = !showFilters.value;
-    // };
-
-    // // Propriété calculée pour appliquer les filtres et le tri
-    // const filteredAndSortedWines = computed(() => {
-    //     let result = [...wines.value]; // Crée une copie des données
-    //     // Applique les filtres
-    //     if (filterColor.value) {
-    //         result = result.filter((wine) => wine.color === filterColor.value);
-    //     }
-    //     if (filterVintage.value) {
-    //         result = result.filter(
-    //             (wine) => wine.vintage === filterVintage.value
-    //         );
-    //     }
-    //     // Applique le tri
-    //     result.sort((a, b) => {
-    //         if (sortColumn.value === 'name') {
-    //             return sortOrder.value === 'asc'
-    //                 ? a.name.localeCompare(b.name)
-    //                 : b.name.localeCompare(a.name);
-    //         } else {
-    //             const col = sortColumn.value as keyof Wine; // Assure TypeScript que la clé est valide
-    //             return sortOrder.value === 'asc'
-    //                 ? (a[col] as number) - (b[col] as number)
-    //                 : (b[col] as number) - (a[col] as number);
-    //         }
-    //     });
-    //     return result;
-    // });
-
-    // const resetFilters = () => {
-    //     filterColor.value = ''; // Réinitialise la couleur
-    //     filterVintage.value = null; // Réinitialise le millésime
-    //     // sortColumn.value = "name"; // Réinitialise la colonne de tri.
-    //     sortColumn.value = 'id'; // Réinitialise la colonne de tri
-    //     sortOrder.value = 'desc'; // Réinitialise l'ordre de tri
-    // };
 </script>

@@ -12,15 +12,16 @@ export class Wine {
         public quantityBought: number,
         public quantityLeft: number,
         public peak: string,
-        public notes: string
+        public notes: string,
+        public wineType: string
     ) {}
 
     isInStock(): boolean {
         return this.quantityLeft > 0;
     }
-    
+
     isAtPeak(currentYear: number): boolean {
-        const [startYear, endYear] = this.peak.split("-").map(Number);
+        const [startYear, endYear] = this.peak.split('-').map(Number);
         return currentYear >= startYear && currentYear <= endYear;
     }
 }
