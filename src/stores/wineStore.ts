@@ -18,7 +18,8 @@ export const useWineStore = defineStore('wineStore', () => {
             6,
             '2025-2030',
             'Un vin exceptionnel.',
-            'Bordeaux'
+            'Bordeaux',
+            0
         ),
         new Wine(
             2,
@@ -31,10 +32,11 @@ export const useWineStore = defineStore('wineStore', () => {
             3000,
             750,
             3,
-            3,
+            0,
             '2030-2040',
             'Un vin légendaire.',
-            'Bordeaux'
+            'Bordeaux',
+            3
         ),
         new Wine(
             3,
@@ -50,7 +52,8 @@ export const useWineStore = defineStore('wineStore', () => {
             1,
             '2035-2045',
             "Chef-d'œuvre rare.",
-            'Loire'
+            'Loire',
+            0
         ),
         new Wine(
             4,
@@ -66,7 +69,8 @@ export const useWineStore = defineStore('wineStore', () => {
             10,
             '2020-2035',
             'Un grand vin moelleux.',
-            'Alsace'
+            'Alsace',
+            2
         ),
         new Wine(
             5,
@@ -82,7 +86,8 @@ export const useWineStore = defineStore('wineStore', () => {
             4,
             '2028-2040',
             'Puissant et élégant.',
-            'Provence'
+            'Provence',
+            1
         ),
         new Wine(
             6,
@@ -98,7 +103,8 @@ export const useWineStore = defineStore('wineStore', () => {
             8,
             '2025-2035',
             'Solide et structuré.',
-            'Côte du Rhône'
+            'Rhône',
+            0
         ),
         new Wine(
             7,
@@ -114,7 +120,8 @@ export const useWineStore = defineStore('wineStore', () => {
             6,
             '2030-2040',
             'Harmonieux avec une grande finesse.',
-            'Bourgogne'
+            'Bourgogne',
+            0
         ),
         new Wine(
             8,
@@ -130,7 +137,8 @@ export const useWineStore = defineStore('wineStore', () => {
             4,
             '2025-2030',
             'Frais et élégant.',
-            'Bourgogne'
+            'Bourgogne',
+            0
         ),
         new Wine(
             9,
@@ -146,7 +154,8 @@ export const useWineStore = defineStore('wineStore', () => {
             5,
             '2025-2040',
             'Un équilibre remarquable.',
-            'Bordeaux'
+            'Bordeaux',
+            2
         ),
         new Wine(
             10,
@@ -162,7 +171,8 @@ export const useWineStore = defineStore('wineStore', () => {
             6,
             '2025-2035',
             'Complexe et raffiné.',
-            'Divers'
+            'Divers',
+            0
         ),
     ]);
 
