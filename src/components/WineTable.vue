@@ -1,8 +1,6 @@
 <template>
     <div>
         <!-- Total de chaque couleur de vin -->
-        le total de chaque vin doit prendre en compte le noombre de bouteille de
-        chaque vin
         <div class="mt-4">
             <span class="font-bold">Total de chaque couleur de vin :</span>
             <span class="ml-2">
@@ -86,60 +84,6 @@
                         </button>
                     </td>
                 </tr>
-                <!-- <tr v-if="wines.length === 0">
-                    <td
-                        colspan="12"
-                        class="text-center text-gray-500 italic py-4"
-                    >
-                        Aucun vin dans la cave pour le moment.
-                    </td>
-                </tr>
-                <tr
-                    v-else
-                    v-for="wine in wines"
-                    :key="wine.id"
-                    class="odd:bg-white even:bg-gray-100"
-                >
-                    <td class="border border-gray-300 px-4 py-2">
-                        {{ wine.name }}
-                    </td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        {{ wine.appellation }}
-                    </td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        {{ wine.producer }}
-                    </td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        {{ wine.wineType }}
-                    </td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        {{ wine.color }}
-                    </td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        {{ wine.vintage }}
-                    </td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        {{ wine.purchaseDate }}
-                    </td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        {{ wine.purchasePrice }}
-                    </td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        {{ wine.bottleSize }}
-                    </td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        {{ wine.quantityBought }}
-                    </td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        {{ wine.quantityLeft }}
-                    </td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        {{ wine.peak }}
-                    </td>
-                    <td class="border border-gray-300 px-4 py-2">
-                        {{ wine.notes }}
-                    </td>
-                </tr> -->
             </tbody>
         </table>
     </div>
@@ -147,10 +91,6 @@
 <script setup lang="ts">
     import { Wine } from '../models/Wine';
     import { PropType } from 'vue';
-
-    // const props = defineProps<{
-    //     wines: Wine[];
-    // }>();
 
     const props = defineProps({
         wines: {

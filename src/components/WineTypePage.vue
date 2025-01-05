@@ -12,7 +12,6 @@
             <WineTable
                 :wines="filteredAndSortedWines"
                 :columns="columnsToDisplay"
-                :actions="availableActions"
                 @consume="handleConsume"
                 @edit="handleEdit"
                 @delete="handleDelete"
@@ -59,7 +58,7 @@
     ];
 
     // Actions disponible
-    const availableActions = ['consume', 'edit', 'delete'];
+    // const availableActions = ['consume', 'edit', 'delete'];
 
     // Récupérer le type de vin depuis l'URL
     const route = useRoute();

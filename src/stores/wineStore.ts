@@ -176,5 +176,14 @@ export const useWineStore = defineStore('wineStore', () => {
         ),
     ]);
 
-    return { wines };
+    function updateWine(updatedWine: Wine) {
+        const index = wines.value.findIndex(
+            (wine) => wine.id === updatedWine.id
+        );
+        if (index !== -1) {
+            wines.value[index] = updatedWine;
+        }
+    }
+
+    return { wines, updateWine };
 });
