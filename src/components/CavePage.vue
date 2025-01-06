@@ -4,80 +4,95 @@
             <h1 class="text-4xl font-serif">Ma Cave</h1>
 
             <!-- Composant de tri et filtre -->
-            <SortAndFilterComponent
+            <!-- <SortAndFilterComponent
                 :data="wines"
                 @update-data="updateFilteredAndSortedWines"
-            />
+            /> -->
+
+            <!-- <table
+                class="table-auto w-full border-collapse border border-gray-300 mt-4"
+            >
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="border border-gray-300 px-4 py-2">
+                            Vignoble
+                        </th>
+                        <th class="border border-gray-300 px-4 py-2">
+                            Couleur
+                        </th>
+                        <th class="border border-gray-300 px-4 py-2">
+                            Quantité Restante
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        v-for="group in groupedData"
+                        :key="group.wineType + group.color"
+                        class="odd:bg-white even:bg-gray-100"
+                    >
+                        <td class="border border-gray-300 px-4 py-2">
+                            {{ group.wineType }}
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            {{ group.color }}
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            {{ group.quantityLeft }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table> -->
+
+            <table
+                class="table-auto w-full border-collapse border border-gray-300 mt-4"
+            >
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="border border-gray-300 px-4 py-2">
+                            Vignoble
+                        </th>
+                        <th class="border border-gray-300 px-4 py-2">Rouge</th>
+                        <th class="border border-gray-300 px-4 py-2">Blanc</th>
+                        <th class="border border-gray-300 px-4 py-2">Rosé</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        v-for="group in groupedData"
+                        :key="group.wineType"
+                        class="odd:bg-white even:bg-gray-100"
+                    >
+                        <td class="border border-gray-300 px-4 py-2">
+                            {{ group.wineType }}
+                        </td>
+                        <td
+                            class="border border-gray-300 px-4 py-2 text-center"
+                        >
+                            {{ group.Rouge }}
+                        </td>
+                        <td
+                            class="border border-gray-300 px-4 py-2 text-center"
+                        >
+                            {{ group.Blanc }}
+                        </td>
+                        <td
+                            class="border border-gray-300 px-4 py-2 text-center"
+                        >
+                            {{ group.Rosé }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
             <!-- Tableau des vins -->
-            <WineTable
+            <!-- <WineTable
                 :wines="filteredAndSortedWines"
                 :columns="columnsToDisplay"
-                :actions="availableActions"
                 @consume="openConsumeModal"
                 @edit="handleEdit"
                 @delete="handleDelete"
-            />
-
-            <!-- Modale pour consommer un vin -->
-            <VueFinalModal
-                v-model="isConsumeModalVisible"
-                content-class="bg-white p-6 rounded-lg max-w-lg mx-auto"
-                overlay-class="bg-black bg-opacity-50"
-            >
-                <h2 class="text-2xl font-bold mb-4">
-                    Consommer : {{ selectedWine?.name }}
-                </h2>
-                <div v-if="selectedWine">
-                    <p class="mb-2">
-                        <strong>Appellation :</strong>
-                        {{ selectedWine.appellation }}
-                    </p>
-                    <p class="mb-4">
-                        <strong>Quantité restante :</strong>
-                        {{ selectedWine.quantityLeft }}
-                    </p>
-                    <div>
-                        <label for="quantity" class="block font-semibold mb-1">
-                            Combien de bouteilles voulez-vous consommer ?
-                        </label>
-                        <input
-                            id="quantity"
-                            v-model.number="quantityToConsume"
-                            type="number"
-                            min="1"
-                            :max="selectedWine.quantityLeft"
-                            class="border border-gray-300 rounded px-2 py-1 w-full"
-                        />
-                    </div>
-                    <div class="mt-4">
-                        <label for="comment" class="block font-semibold mb-1">
-                            Ajouter un commentaire :
-                        </label>
-                        <textarea
-                            id="comment"
-                            v-model="comment"
-                            class="border border-gray-300 rounded px-2 py-1 w-full"
-                            rows="3"
-                            placeholder="Ajouter un commentaire..."
-                        ></textarea>
-                    </div>
-                    <div class="flex justify-end mt-4">
-                        <button
-                            @click="closeConsumeModal"
-                            class="mr-2 px-4 py-2 bg-gray-500 text-white rounded"
-                        >
-                            Annuler
-                        </button>
-                        <button
-                            @click="handleConsumption"
-                            class="px-4 py-2 bg-blue-500 text-white rounded"
-                        >
-                            Confirmer
-                        </button>
-                    </div>
-                </div>
-            </VueFinalModal>
+            /> -->
         </div>
     </div>
 </template>
@@ -88,7 +103,6 @@
     import SortAndFilterComponent from './SortAndFilterComponent.vue';
     import WineTable from './WineTable.vue';
     import { useWineStore } from '../stores/wineStore';
-    import { VueFinalModal } from 'vue-final-modal';
 
     // Variable de contrôle pour afficher ou cacher la modale
     const wineStore = useWineStore();
@@ -113,23 +127,10 @@
     });
 
     // Colonne à afficher
-    const columnsToDisplay = [
-        'name',
-        'appellation',
-        'producer',
-        'wineType',
-        'color',
-        'vintage',
-        'purchaseDate',
-        'purchasePrice',
-        'bottleSize',
-        'quantityBought',
-        'quantityLeft',
-        'peak',
-    ];
+    const columnsToDisplay = ['wineType', 'color', 'quantityLeft'];
 
     // Actions disponible
-    const availableActions = ['consume', 'edit', 'delete'];
+    // const availableActions = ['consume', 'edit', 'delete'];
 
     // Fonction pour mettre à jour les données en fonction du tri et des filtres
     const updateFilteredAndSortedWines = ({
@@ -169,6 +170,113 @@
 
         filteredAndSortedWines.value = result;
     };
+
+    const groupedData = computed(() => {
+        const data: {
+            wineType: string;
+            Rouge: number;
+            Blanc: number;
+            Rosé: number;
+        }[] = [];
+
+        // Couleurs fixes : Rouge, Blanc, Rosé
+        const colors = ['Rouge', 'Blanc', 'Rosé'] as const;
+
+        // Obtenir la map des types de vin
+        const wineTypeMap = wineStore.getWineTypeMap();
+        const allWineTypes = Array.from(wineTypeMap.keys()); // Noms des types pour affichage
+
+        // Initialiser les groupes pour chaque type de vin
+        allWineTypes.forEach((wineType: string) => {
+            data.push({
+                wineType, // Utilise le nom d'affichage
+                Rouge: 0,
+                Blanc: 0,
+                Rosé: 0,
+            });
+        });
+
+        // Ajouter les données des vins existants dans les groupes correspondants
+        wines.value.forEach((wine) => {
+            const wineTypeDisplayName = Array.from(wineTypeMap.entries()).find(
+                ([, value]) => value === wine.wineType
+            )?.[0]; // Récupérer le nom d'affichage à partir de la valeur URL-friendly
+
+            if (!wineTypeDisplayName) return; // Ignorer les types inconnus
+
+            const group = data.find(
+                (entry) => entry.wineType === wineTypeDisplayName
+            );
+
+            if (
+                group &&
+                colors.includes(wine.color as (typeof colors)[number])
+            ) {
+                group[wine.color as 'Rouge' | 'Blanc' | 'Rosé'] +=
+                    wine.quantityLeft;
+            }
+        });
+
+        // Trier par ordre alphabétique des types de vin
+        data.sort((a, b) => a.wineType.localeCompare(b.wineType));
+
+        return data;
+    });
+
+    // const groupedData = computed(() => {
+    //     const data: {
+    //         wineType: string;
+    //         color: string;
+    //         quantityLeft: number;
+    //     }[] = [];
+
+    //     // Couleurs fixes : Rouge, Blanc, Rosé
+    //     const colors = ['Rouge', 'Blanc', 'Rosé'];
+
+    //     // Obtenir tous les types de vin depuis la map
+    //     const wineTypeMap = wineStore.getWineTypeMap();
+    //     const allWineTypes = Array.from(wineTypeMap.keys()); // Noms des types pour affichage
+
+    //     // Initialiser les groupes pour chaque type de vin et couleur
+    //     allWineTypes.forEach((wineType: string) => {
+    //         colors.forEach((color) => {
+    //             data.push({
+    //                 wineType, // Utilise le nom d'affichage du type de vin
+    //                 color,
+    //                 quantityLeft: 0, // Par défaut, aucune bouteille
+    //             });
+    //         });
+    //     });
+
+    //     // Ajouter les données des vins existants dans les groupes correspondants
+    //     wines.value.forEach((wine) => {
+    //         const wineTypeDisplayName = Array.from(wineTypeMap.entries()).find(
+    //             ([, value]) => value === wine.wineType
+    //         )?.[0]; // Récupérer le nom d'affichage à partir de la valeur URL-friendly
+
+    //         if (!wineTypeDisplayName) return; // Ignorer les types inconnus
+
+    //         const group = data.find(
+    //             (entry) =>
+    //                 entry.wineType === wineTypeDisplayName &&
+    //                 entry.color === wine.color
+    //         );
+
+    //         if (group) {
+    //             group.quantityLeft += wine.quantityLeft;
+    //         }
+    //     });
+
+    //     // Trier par ordre alphabétique des types de vin et par ordre des couleurs
+    //     data.sort((a, b) => {
+    //         if (a.wineType !== b.wineType) {
+    //             return a.wineType.localeCompare(b.wineType);
+    //         }
+    //         return colors.indexOf(a.color) - colors.indexOf(b.color);
+    //     });
+
+    //     return data;
+    // });
 
     // Ouvrir la modal pour consommer
     function openConsumeModal(wine: Wine) {

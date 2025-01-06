@@ -18,7 +18,7 @@ export const useWineStore = defineStore('wineStore', () => {
             6,
             '2025-2030',
             'Un vin exceptionnel.',
-            'Bordeaux',
+            'bordeaux',
             0
         ),
         new Wine(
@@ -35,7 +35,7 @@ export const useWineStore = defineStore('wineStore', () => {
             0,
             '2030-2040',
             'Un vin légendaire.',
-            'Bordeaux',
+            'bordeaux',
             3
         ),
         new Wine(
@@ -52,7 +52,7 @@ export const useWineStore = defineStore('wineStore', () => {
             1,
             '2035-2045',
             "Chef-d'œuvre rare.",
-            'Loire',
+            'loire',
             0
         ),
         new Wine(
@@ -69,7 +69,7 @@ export const useWineStore = defineStore('wineStore', () => {
             10,
             '2020-2035',
             'Un grand vin moelleux.',
-            'Alsace',
+            'alsace',
             2
         ),
         new Wine(
@@ -86,7 +86,7 @@ export const useWineStore = defineStore('wineStore', () => {
             4,
             '2028-2040',
             'Puissant et élégant.',
-            'Provence',
+            'provence',
             1
         ),
         new Wine(
@@ -103,7 +103,7 @@ export const useWineStore = defineStore('wineStore', () => {
             8,
             '2025-2035',
             'Solide et structuré.',
-            'Rhône',
+            'cote-du-rhone',
             0
         ),
         new Wine(
@@ -120,7 +120,7 @@ export const useWineStore = defineStore('wineStore', () => {
             6,
             '2030-2040',
             'Harmonieux avec une grande finesse.',
-            'Bourgogne',
+            'bourgogne',
             0
         ),
         new Wine(
@@ -137,7 +137,7 @@ export const useWineStore = defineStore('wineStore', () => {
             4,
             '2025-2030',
             'Frais et élégant.',
-            'Bourgogne',
+            'bourgogne',
             0
         ),
         new Wine(
@@ -154,7 +154,7 @@ export const useWineStore = defineStore('wineStore', () => {
             5,
             '2025-2040',
             'Un équilibre remarquable.',
-            'Bordeaux',
+            'bordeaux',
             2
         ),
         new Wine(
@@ -171,10 +171,58 @@ export const useWineStore = defineStore('wineStore', () => {
             6,
             '2025-2035',
             'Complexe et raffiné.',
-            'Divers',
+            'divers',
             0
         ),
     ]);
+
+    function getAllWineTypes(): string[] {
+        const wineTypes = [
+            'Alsace',
+            'Bordeaux',
+            'Bourgogne',
+            'Champagne',
+            'Côte du Rhône',
+            'Divers',
+            'Etranger',
+            'Loire',
+            'Pétillant',
+            'Provence',
+            'Sud-Ouest',
+        ];
+        return wineTypes;
+    }
+
+    // function getWineTypeMap(): Record<string, string> {
+    //     return {
+    //         Alsace: 'alsace',
+    //         Bordeaux: 'bordeaux',
+    //         Bourgogne: 'bourgogne',
+    //         Champagne: 'champagne',
+    //         'Côte du Rhône': 'cote-du-rhone',
+    //         Divers: 'divers',
+    //         Etranger: 'etranger',
+    //         Loire: 'loire',
+    //         Pétillant: 'petillant',
+    //         Provence: 'provence',
+    //         'Sud-Ouest': 'sud-ouest',
+    //     };
+    // }
+    function getWineTypeMap(): Map<string, string> {
+        const wineTypeMap = new Map<string, string>();
+        wineTypeMap.set('Alsace', 'alsace');
+        wineTypeMap.set('Bordeaux', 'bordeaux');
+        wineTypeMap.set('Bourgogne', 'bourgogne');
+        wineTypeMap.set('Champagne', 'champagne');
+        wineTypeMap.set('Côte du Rhône', 'cote-du-rhone');
+        wineTypeMap.set('Divers', 'divers');
+        wineTypeMap.set('Etranger', 'etranger');
+        wineTypeMap.set('Loire', 'loire');
+        wineTypeMap.set('Pétillant', 'petillant');
+        wineTypeMap.set('Provence', 'provence');
+        wineTypeMap.set('Sud-Ouest', 'sud-ouest');
+        return wineTypeMap;
+    }
 
     function updateWine(updatedWine: Wine) {
         const index = wines.value.findIndex(
@@ -185,5 +233,5 @@ export const useWineStore = defineStore('wineStore', () => {
         }
     }
 
-    return { wines, updateWine };
+    return { wines, updateWine, getAllWineTypes, getWineTypeMap };
 });
