@@ -3,52 +3,11 @@
         <div class="bg-paper text-ink min-h-screen p-4">
             <h1 class="text-4xl font-serif">Ma Cave</h1>
 
-            <!-- Composant de tri et filtre -->
-            <!-- <SortAndFilterComponent
-                :data="wines"
-                @update-data="updateFilteredAndSortedWines"
-            /> -->
-
             <!-- <table
-                class="table-auto w-full border-collapse border border-gray-300 mt-4"
+                class="table-auto w-full border-collapse border border-gray-300"
             >
                 <thead>
-                    <tr class="bg-gray-200">
-                        <th class="border border-gray-300 px-4 py-2">
-                            Vignoble
-                        </th>
-                        <th class="border border-gray-300 px-4 py-2">
-                            Couleur
-                        </th>
-                        <th class="border border-gray-300 px-4 py-2">
-                            Quantité Restante
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr
-                        v-for="group in groupedData"
-                        :key="group.wineType + group.color"
-                        class="odd:bg-white even:bg-gray-100"
-                    >
-                        <td class="border border-gray-300 px-4 py-2">
-                            {{ group.wineType }}
-                        </td>
-                        <td class="border border-gray-300 px-4 py-2">
-                            {{ group.color }}
-                        </td>
-                        <td class="border border-gray-300 px-4 py-2">
-                            {{ group.quantityLeft }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table> -->
-
-            <table
-                class="table-auto w-full border-collapse border border-gray-300 mt-4"
-            >
-                <thead>
-                    <tr class="bg-gray-200">
+                    <tr>
                         <th class="border border-gray-300 px-4 py-2">
                             Vignoble
                         </th>
@@ -59,40 +18,104 @@
                 </thead>
                 <tbody>
                     <tr
-                        v-for="group in groupedData"
-                        :key="group.wineType"
-                        class="odd:bg-white even:bg-gray-100"
+                        v-for="(row, index) in groupedData"
+                        :key="row.wineType"
+                        :class="{
+                            'bg-red-200': index % 2 === 0 && row.Rouge > 0,
+                            'bg-red-100': index % 2 !== 0 && row.Rouge > 0,
+                            'bg-yellow-200': index % 2 === 0 && row.Blanc > 0,
+                            'bg-yellow-100': index % 2 !== 0 && row.Blanc > 0,
+                            'bg-orange-200': index % 2 === 0 && row.Rosé > 0,
+                            'bg-orange-100': index % 2 !== 0 && row.Rosé > 0,
+                        }"
                     >
                         <td class="border border-gray-300 px-4 py-2">
-                            {{ group.wineType }}
+                            {{ row.wineType }}
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            {{ row.Rouge }}
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            {{ row.Blanc }}
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            {{ row.Rosé }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table> -->
+            <table
+                class="table-auto w-full border-collapse border border-gray-300 mt-4"
+            >
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="border border-gray-300 px-4 py-2 font-serif">
+                            Vignoble
+                        </th>
+                        <th
+                            class="border border-gray-300 px-4 py-2 bg-dark-red text-red-900 font-serif"
+                        >
+                            Rouge
+                        </th>
+                        <th
+                            class="border border-gray-300 px-4 py-2 bg-dark-yellow text-yellow-900 font-serif"
+                        >
+                            Blanc
+                        </th>
+                        <th
+                            class="border border-gray-300 px-4 py-2 bg-dark-orange text-orange-900 font-serif"
+                        >
+                            Rosé
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        v-for="(row, index) in groupedData"
+                        :key="row.wineType"
+                        class="odd:bg-white even:bg-gray-100"
+                    >
+                        <td
+                            class="border border-gray-300 px-4 py-2 font-serif text-center"
+                        >
+                            {{ row.wineType }}
                         </td>
                         <td
-                            class="border border-gray-300 px-4 py-2 text-center"
+                            class="border border-gray-300 px-4 py-2 font-serif text-center"
+                            :class="[
+                                index % 2 === 0
+                                    ? 'bg-light-red'
+                                    : 'bg-dark-red',
+                                row.Rouge > 0 ? 'font-bold' : '',
+                            ]"
                         >
-                            {{ group.Rouge }}
+                            {{ row.Rouge }}
                         </td>
                         <td
-                            class="border border-gray-300 px-4 py-2 text-center"
+                            class="border border-gray-300 px-4 py-2 font-serif text-center"
+                            :class="[
+                                index % 2 === 0
+                                    ? 'bg-light-yellow'
+                                    : 'bg-dark-yellow',
+                                row.Blanc > 0 ? 'font-bold' : '',
+                            ]"
                         >
-                            {{ group.Blanc }}
+                            {{ row.Blanc }}
                         </td>
                         <td
-                            class="border border-gray-300 px-4 py-2 text-center"
+                            class="border border-gray-300 px-4 py-2 font-serif text-center"
+                            :class="[
+                                index % 2 === 0
+                                    ? 'bg-light-orange'
+                                    : 'bg-dark-orange',
+                                row.Rosé > 0 ? 'font-bold' : '',
+                            ]"
                         >
-                            {{ group.Rosé }}
+                            {{ row.Rosé }}
                         </td>
                     </tr>
                 </tbody>
             </table>
-
-            <!-- Tableau des vins -->
-            <!-- <WineTable
-                :wines="filteredAndSortedWines"
-                :columns="columnsToDisplay"
-                @consume="openConsumeModal"
-                @edit="handleEdit"
-                @delete="handleDelete"
-            /> -->
         </div>
     </div>
 </template>
@@ -223,61 +246,6 @@
         return data;
     });
 
-    // const groupedData = computed(() => {
-    //     const data: {
-    //         wineType: string;
-    //         color: string;
-    //         quantityLeft: number;
-    //     }[] = [];
-
-    //     // Couleurs fixes : Rouge, Blanc, Rosé
-    //     const colors = ['Rouge', 'Blanc', 'Rosé'];
-
-    //     // Obtenir tous les types de vin depuis la map
-    //     const wineTypeMap = wineStore.getWineTypeMap();
-    //     const allWineTypes = Array.from(wineTypeMap.keys()); // Noms des types pour affichage
-
-    //     // Initialiser les groupes pour chaque type de vin et couleur
-    //     allWineTypes.forEach((wineType: string) => {
-    //         colors.forEach((color) => {
-    //             data.push({
-    //                 wineType, // Utilise le nom d'affichage du type de vin
-    //                 color,
-    //                 quantityLeft: 0, // Par défaut, aucune bouteille
-    //             });
-    //         });
-    //     });
-
-    //     // Ajouter les données des vins existants dans les groupes correspondants
-    //     wines.value.forEach((wine) => {
-    //         const wineTypeDisplayName = Array.from(wineTypeMap.entries()).find(
-    //             ([, value]) => value === wine.wineType
-    //         )?.[0]; // Récupérer le nom d'affichage à partir de la valeur URL-friendly
-
-    //         if (!wineTypeDisplayName) return; // Ignorer les types inconnus
-
-    //         const group = data.find(
-    //             (entry) =>
-    //                 entry.wineType === wineTypeDisplayName &&
-    //                 entry.color === wine.color
-    //         );
-
-    //         if (group) {
-    //             group.quantityLeft += wine.quantityLeft;
-    //         }
-    //     });
-
-    //     // Trier par ordre alphabétique des types de vin et par ordre des couleurs
-    //     data.sort((a, b) => {
-    //         if (a.wineType !== b.wineType) {
-    //             return a.wineType.localeCompare(b.wineType);
-    //         }
-    //         return colors.indexOf(a.color) - colors.indexOf(b.color);
-    //     });
-
-    //     return data;
-    // });
-
     // Ouvrir la modal pour consommer
     function openConsumeModal(wine: Wine) {
         selectedWine.value = wine;
@@ -321,3 +289,36 @@
         // wineStore.delete(wine);
     }
 </script>
+<style scoped>
+    /* Rouge Bordeaux */
+    .bg-light-red {
+        background-color: #f8d7da; /* Couleur claire */
+    }
+
+    .bg-dark-red {
+        background-color: #f4c2c4; /* Couleur foncée */
+    }
+
+    /* Jaune vin blanc */
+    .bg-light-yellow {
+        background-color: #fff9d6; /* Couleur claire */
+    }
+
+    .bg-dark-yellow {
+        background-color: #ffeeba; /* Couleur foncée */
+    }
+
+    /* Orange vin rosé */
+    .bg-light-orange {
+        background-color: #ffd9b3; /* Couleur claire */
+    }
+
+    .bg-dark-orange {
+        background-color: #ffcc88; /* Couleur foncée */
+    }
+
+    /* Alignement du texte */
+    .text-center {
+        text-align: center;
+    }
+</style>
