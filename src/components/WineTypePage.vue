@@ -259,7 +259,6 @@
     import { Wine } from '../models/Wine';
     import { useWineStore } from '../stores/wineStore';
     import { VueFinalModal } from 'vue-final-modal';
-    import { v4 as uuidv4 } from 'uuid';
 
     // Charger le store
     const wineStore = useWineStore();
@@ -339,15 +338,12 @@
 
         // Filtrer les vins avec quantité restante > 0
         result = result.filter((wine) => wine.quantityLeft > 0);
-        console.log('Résultat  1 :', result);
         // Appliquer les filtres
         if (filterColor) {
             result = result.filter((wine) => wine.color === filterColor);
-            console.log('Résultat 2 :', result);
         }
         if (filterVintage) {
             result = result.filter((wine) => wine.vintage === filterVintage);
-            console.log('Résultat 3 :', result);
         }
 
         // Appliquer le tri
@@ -363,7 +359,6 @@
                     : (b[col] as number) - (a[col] as number);
             }
         });
-        console.log('Résultat final:', result);
         filteredAndSortedWines.value = result;
     };
 
