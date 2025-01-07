@@ -10,6 +10,14 @@
                 @update-data="updateFilteredAndSortedWines"
             />
 
+            <!-- Bouton pour ouvrir la modale d'ajout de vin -->
+            <button
+                @click="openAddModal"
+                class="mt-4 px-4 py-2 bg-green-500 text-white rounded"
+            >
+                Ajouter un vin
+            </button>
+
             <!-- Tableau des vins -->
             <WineTable
                 :wines="filteredAndSortedWines"
@@ -79,6 +87,166 @@
                     </div>
                 </div>
             </VueFinalModal>
+
+            <!-- Modale pour ajouter un vin -->
+            <VueFinalModal
+                v-model="isAddModalVisible"
+                content-class="bg-white p-6 rounded-lg max-w-4xl mx-auto"
+                overlay-class="bg-black bg-opacity-50"
+            >
+                <h2 class="text-2xl font-bold mb-6">
+                    Ajouter un vin - {{ wineTypeDisplayName }}
+                </h2>
+                <form @submit.prevent="handleAddWine">
+                    <!-- Ligne 1 -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Nom du vin :</label
+                            >
+                            <input
+                                type="text"
+                                v-model="newWine.name"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                                placeholder="Ex : Château Margaux"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Appellation :</label
+                            >
+                            <input
+                                type="text"
+                                v-model="newWine.appellation"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                                placeholder="Ex : Margaux"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Ligne 2 -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Producteur :</label
+                            >
+                            <input
+                                type="text"
+                                v-model="newWine.producer"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                                placeholder="Ex : Château Margaux"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Couleur :</label
+                            >
+                            <select
+                                v-model="newWine.color"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                            >
+                                <option value="Rouge">Rouge</option>
+                                <option value="Blanc">Blanc</option>
+                                <option value="Rosé">Rosé</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Ligne 3 -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Millésime :</label
+                            >
+                            <input
+                                type="number"
+                                v-model="newWine.vintage"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                                placeholder="Ex : 2015"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Date d'achat :</label
+                            >
+                            <input
+                                type="date"
+                                v-model="newWine.purchaseDate"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Ligne 4 -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Prix d'achat :</label
+                            >
+                            <input
+                                type="number"
+                                step="0.01"
+                                v-model="newWine.purchasePrice"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                                placeholder="Ex : 25.50"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Contenance de la bouteille :</label
+                            >
+                            <input
+                                type="number"
+                                v-model="newWine.bottleSize"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                                placeholder="Ex : 750 (en ml)"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Ligne 5 -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Quantité achetée :</label
+                            >
+                            <input
+                                type="number"
+                                v-model="newWine.quantityBought"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                                placeholder="Ex : 6"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Date de consommation optimale :</label
+                            >
+                            <input
+                                type="date"
+                                v-model="newWine.peak"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Boutons -->
+                    <div class="flex justify-end gap-4 mt-6">
+                        <button
+                            type="button"
+                            @click="closeAddModal"
+                            class="px-6 py-2 bg-gray-400 text-white rounded"
+                        >
+                            Annuler
+                        </button>
+                        <button
+                            type="submit"
+                            class="px-6 py-2 bg-blue-600 text-white rounded"
+                        >
+                            Ajouter
+                        </button>
+                    </div>
+                </form>
+            </VueFinalModal>
         </div>
     </div>
 </template>
@@ -91,6 +259,7 @@
     import { Wine } from '../models/Wine';
     import { useWineStore } from '../stores/wineStore';
     import { VueFinalModal } from 'vue-final-modal';
+    import { v4 as uuidv4 } from 'uuid';
 
     // Charger le store
     const wineStore = useWineStore();
@@ -134,7 +303,7 @@
     ];
 
     // Actions disponibles
-    const availableActions = ['consume', 'edit', 'delete'];
+    const availableActions = ['consume', 'add', 'edit', 'delete'];
 
     // Watch sur le type de vin (route.params.type)
     watch(
@@ -170,13 +339,15 @@
 
         // Filtrer les vins avec quantité restante > 0
         result = result.filter((wine) => wine.quantityLeft > 0);
-
+        console.log('Résultat  1 :', result);
         // Appliquer les filtres
         if (filterColor) {
             result = result.filter((wine) => wine.color === filterColor);
+            console.log('Résultat 2 :', result);
         }
         if (filterVintage) {
             result = result.filter((wine) => wine.vintage === filterVintage);
+            console.log('Résultat 3 :', result);
         }
 
         // Appliquer le tri
@@ -192,11 +363,11 @@
                     : (b[col] as number) - (a[col] as number);
             }
         });
-
+        console.log('Résultat final:', result);
         filteredAndSortedWines.value = result;
     };
 
-    // Modal-related state and methods
+    // Variables pour la modale de consommation
     const isConsumeModalVisible = ref(false);
     const selectedWine = ref<Wine | null>(null);
     const quantityToConsume = ref(1);
@@ -230,152 +401,52 @@
         closeConsumeModal();
     }
 
+    // Variables pour la modale d'ajout
+    const isAddModalVisible = ref(false);
+
+    // Modèle pour un nouveau vin
+    const newWine = ref<Wine>(
+        new Wine(
+            0,
+            '',
+            '',
+            '',
+            'Rouge',
+            0,
+            '',
+            0,
+            0,
+            0,
+            0,
+            '',
+            '',
+            wineTypeUrl.value,
+            0
+        )
+    );
+
+    function openAddModal() {
+        isAddModalVisible.value = true;
+    }
+
+    function closeAddModal() {
+        isAddModalVisible.value = false;
+    }
+
+    // Méthodes
+    function handleAddWine() {
+        wineStore.addNewWine(newWine.value);
+
+        updateFilteredAndSortedWines({
+            sortColumn: 'id',
+            sortOrder: 'desc',
+            filterColor: '',
+            filterVintage: null,
+        });
+
+        closeAddModal();
+    }
+
     function handleEdit(wine: Wine) {}
     function handleDelete(wine: Wine) {}
-
-    // // Appeler la fonction lors du montage du composant
-    // onMounted(() => {
-    //     updateFilteredAndSortedWines({
-    //         sortColumn: 'id', // Colonne par défaut pour le tri
-    //         sortOrder: 'desc', // Ordre par défaut
-    //         filterColor: '', // Pas de filtre couleur par défaut
-    //         filterVintage: null, // Pas de filtre millésime par défaut
-    //     });
-    // });
-
-    // // Colonne à afficher
-    // const columnsToDisplay = [
-    //     'name',
-    //     'appellation',
-    //     'producer',
-    //     'color',
-    //     'vintage',
-    //     'purchaseDate',
-    //     'purchasePrice',
-    //     'bottleSize',
-    //     'quantityBought',
-    //     'quantityLeft',
-    //     'peak',
-    // ];
-
-    // // Actions disponible
-    // const availableActions = ['consume', 'edit', 'delete'];
-
-    // // Récupérer le type de vin depuis l'URL
-    // const route = useRoute();
-    // const wineType = ref(route.params.type as string);
-
-    // const isConsumeModalVisible = ref(false);
-    // const selectedWine = ref<Wine | null>(null);
-    // const quantityToConsume = ref(1);
-    // const comment = ref('');
-
-    // // Liste des vins filtrés par type
-    // const winesByType = computed(() => {
-    //     return wines.value.filter((wine) => wine.wineType === wineType.value);
-    // });
-
-    // // Données triées et filtrées
-    // const filteredAndSortedWines = ref<Wine[]>([]);
-
-    // // Mise à jour dynamique quand le paramètre de l'URL change
-    // watch(
-    //     () => route.params.type,
-    //     (newType) => {
-    //         wineType.value = newType as string;
-    //         filteredAndSortedWines.value = [...winesByType.value];
-    //     }
-    // );
-
-    // // Fonction pour mettre à jour les données en fonction du tri et des filtres
-    // const updateFilteredAndSortedWines = ({
-    //     sortColumn,
-    //     sortOrder,
-    //     filterColor,
-    //     filterVintage,
-    // }: any) => {
-    //     // Créer une copie des données des vins
-    //     let result = [...wines.value];
-
-    //     // Filtrer les vins par type
-    //     result = result.filter((wine) => wine.wineType === wineType.value);
-
-    //     // Filtrer les vins avec quantité restante > 0
-    //     result = result.filter((wine) => wine.quantityLeft > 0);
-
-    //     // Appliquer les filtres
-    //     if (filterColor) {
-    //         result = result.filter((wine) => wine.color === filterColor);
-    //     }
-
-    //     if (filterVintage) {
-    //         result = result.filter((wine) => wine.vintage === filterVintage);
-    //     }
-
-    //     // Appliquer le tri
-    //     result.sort((a, b) => {
-    //         if (sortColumn === 'name') {
-    //             return sortOrder === 'asc'
-    //                 ? a.name.localeCompare(b.name)
-    //                 : b.name.localeCompare(a.name);
-    //         } else {
-    //             const col = sortColumn as keyof Wine;
-    //             return sortOrder === 'asc'
-    //                 ? (a[col] as number) - (b[col] as number)
-    //                 : (b[col] as number) - (a[col] as number);
-    //         }
-    //     });
-
-    //     filteredAndSortedWines.value = result;
-    // };
-
-    // // Initialiser avec les vins non triés/filtrés
-    // filteredAndSortedWines.value = [...winesByType.value];
-
-    // // Ouvrir la modal pour consommer
-    // function openConsumeModal(wine: Wine) {
-    //     selectedWine.value = wine;
-    //     quantityToConsume.value = 1;
-    //     comment.value = wine.notes || ''; // Charger un commentaire existant si présent
-    //     isConsumeModalVisible.value = true;
-    // }
-
-    // // Fermer la modal
-    // function closeConsumeModal() {
-    //     isConsumeModalVisible.value = false;
-    //     selectedWine.value = null;
-    // }
-
-    // // Confirmer la consommation
-    // function handleConsumption() {
-    //     if (!selectedWine.value || quantityToConsume.value <= 0) return;
-
-    //     if (quantityToConsume.value > selectedWine.value.quantityLeft) {
-    //         alert('Quantité invalide !');
-    //         return;
-    //     }
-
-    //     // Mettre à jour les données
-    //     selectedWine.value.quantityLeft -= quantityToConsume.value;
-    //     selectedWine.value.quantityDrunk += quantityToConsume.value;
-    //     selectedWine.value.notes = comment.value;
-
-    //     // Mettre à jour le store
-    //     wineStore.updateWine(selectedWine.value);
-
-    //     console.log(`${quantityToConsume.value} bouteille(s) consommée(s).`);
-    //     closeConsumeModal();
-    // }
-
-    // function handleConsume(wine: Wine) {
-    //     // wineStore.consume(wine);
-    // }
-
-    // function handleEdit(wine: Wine) {
-    //     // wineStore.edit(wine);
-    // }
-
-    // function handleDelete(wine: Wine) {
-    //     // wineStore.delete(wine);
-    // }
 </script>

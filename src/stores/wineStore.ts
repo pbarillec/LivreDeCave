@@ -189,25 +189,11 @@ export const useWineStore = defineStore('wineStore', () => {
             'Pétillant',
             'Provence',
             'Sud-Ouest',
+            'Savoie',
         ];
         return wineTypes;
     }
 
-    // function getWineTypeMap(): Record<string, string> {
-    //     return {
-    //         Alsace: 'alsace',
-    //         Bordeaux: 'bordeaux',
-    //         Bourgogne: 'bourgogne',
-    //         Champagne: 'champagne',
-    //         'Côte du Rhône': 'cote-du-rhone',
-    //         Divers: 'divers',
-    //         Etranger: 'etranger',
-    //         Loire: 'loire',
-    //         Pétillant: 'petillant',
-    //         Provence: 'provence',
-    //         'Sud-Ouest': 'sud-ouest',
-    //     };
-    // }
     function getWineTypeMap(): Map<string, string> {
         const wineTypeMap = new Map<string, string>();
         wineTypeMap.set('Alsace', 'alsace');
@@ -221,7 +207,15 @@ export const useWineStore = defineStore('wineStore', () => {
         wineTypeMap.set('Pétillant', 'petillant');
         wineTypeMap.set('Provence', 'provence');
         wineTypeMap.set('Sud-Ouest', 'sud-ouest');
+        wineTypeMap.set('Savoie', 'savoie');
         return wineTypeMap;
+    }
+
+    function addNewWine(newWine: Wine) {
+        newWine.id = generateId(); // Assigne un nouvel ID unique
+        newWine.quantityLeft = newWine.quantityBought; // Initialise la quantité restante
+
+        wines.value.push(newWine);
     }
 
     function updateWine(updatedWine: Wine) {
@@ -233,5 +227,15 @@ export const useWineStore = defineStore('wineStore', () => {
         }
     }
 
-    return { wines, updateWine, getAllWineTypes, getWineTypeMap };
+    function generateId(): number {
+        if (wines.value.length === 0) {
+            return 1; // Si aucun vin n'est présent, commence à 1
+        }
+
+        // Trouve le plus grand ID existant
+        const maxId = Math.max(...wines.value.map((wine) => wine.id));
+        return maxId + 1; // Retourne l'ID suivant
+    }
+
+    return { wines, addNewWine, updateWine, getAllWineTypes, getWineTypeMap };
 });
