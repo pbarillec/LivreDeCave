@@ -24,8 +24,8 @@
                 :columns="columnsToDisplay"
                 :actions="availableActions"
                 @consume="openConsumeModal"
-                @edit="handleEdit"
-                @delete="handleDelete"
+                @edit="openEditModal"
+                @delete="handleDeleteWine"
             />
 
             <!-- Modale pour consommer un vin -->
@@ -86,6 +86,161 @@
                         </button>
                     </div>
                 </div>
+            </VueFinalModal>
+
+            <!-- Modale pour modifier un vin -->
+            <VueFinalModal
+                v-model="isEditModalVisible"
+                content-class="bg-white p-6 rounded-lg max-w-4xl mx-auto"
+                overlay-class="bg-black bg-opacity-50"
+            >
+                <h2 class="text-2xl font-bold mb-6">
+                    Modifier le vin - {{ selectedWine?.name }}
+                </h2>
+                <form v-if="editableWine" @submit.prevent="handleEditWine">
+                    <!-- Ligne 1 -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Nom du vin :</label
+                            >
+                            <input
+                                type="text"
+                                v-model="editableWine.name"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                                placeholder="Ex : Château Margaux"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Appellation :</label
+                            >
+                            <input
+                                type="text"
+                                v-model="editableWine.appellation"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                                placeholder="Ex : Margaux"
+                            />
+                        </div>
+                    </div>
+                    <!-- Ligne 2 -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Producteur :</label
+                            >
+                            <input
+                                type="text"
+                                v-model="editableWine.producer"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                                placeholder="Ex : Château Margaux"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Couleur :</label
+                            >
+                            <select
+                                v-model="editableWine.color"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                            >
+                                <option value="Rouge">Rouge</option>
+                                <option value="Blanc">Blanc</option>
+                                <option value="Rosé">Rosé</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Ligne 3 -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Millésime :</label
+                            >
+                            <input
+                                type="number"
+                                v-model="editableWine.vintage"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                                placeholder="Ex : 2015"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Date d'achat :</label
+                            >
+                            <input
+                                type="date"
+                                v-model="editableWine.purchaseDate"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                            />
+                        </div>
+                    </div>
+                    <!-- Ligne 4 -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Prix d'achat :</label
+                            >
+                            <input
+                                type="number"
+                                step="0.01"
+                                v-model="editableWine.purchasePrice"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                                placeholder="Ex : 25.50"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Contenance de la bouteille :</label
+                            >
+                            <input
+                                type="number"
+                                v-model="editableWine.bottleSize"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                                placeholder="Ex : 750 (en ml)"
+                            />
+                        </div>
+                    </div>
+                    <!-- Ligne 5 -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Quantité achetée :</label
+                            >
+                            <input
+                                type="number"
+                                v-model="editableWine.quantityBought"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                                placeholder="Ex : 6"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1"
+                                >Date de consommation optimale :</label
+                            >
+                            <input
+                                type="date"
+                                v-model="editableWine.peak"
+                                class="w-full border-gray-300 rounded px-3 py-2"
+                            />
+                        </div>
+                    </div>
+                    <!-- Boutons -->
+                    <div class="flex justify-end gap-4 mt-6">
+                        <button
+                            type="button"
+                            @click="closeEditModal"
+                            class="px-6 py-2 bg-gray-400 text-white rounded"
+                        >
+                            Annuler
+                        </button>
+                        <button
+                            type="submit"
+                            class="px-6 py-2 bg-blue-600 text-white rounded"
+                        >
+                            Enregistrer
+                        </button>
+                    </div>
+                </form>
             </VueFinalModal>
 
             <!-- Modale pour ajouter un vin -->
@@ -428,7 +583,6 @@
         isAddModalVisible.value = false;
     }
 
-    // Méthodes
     function handleAddWine() {
         wineStore.addNewWine(newWine.value);
 
@@ -442,6 +596,46 @@
         closeAddModal();
     }
 
-    function handleEdit(wine: Wine) {}
-    function handleDelete(wine: Wine) {}
+    // Variables pour la modale d'édition
+    const isEditModalVisible = ref(false);
+    const editableWine = ref<Wine | null>(null);
+
+    function openEditModal(wine: Wine) {
+        editableWine.value = { ...wine };
+        isEditModalVisible.value = true;
+    }
+
+    function closeEditModal() {
+        isEditModalVisible.value = false;
+        selectedWine.value = null;
+    }
+
+    function handleEditWine(event: Event) {
+        event.preventDefault(); // Empêche le rechargement de la page
+
+        if (editableWine.value) {
+            // Mettez à jour le vin dans le store
+            wineStore.updateWine(editableWine.value);
+
+            // Fermez la modale et réinitialisez la variable
+            closeEditModal();
+
+            updateFilteredAndSortedWines({
+                sortColumn: 'id',
+                sortOrder: 'desc',
+                filterColor: '',
+                filterVintage: null,
+            });
+        }
+    }
+
+    function handleDeleteWine(wine: Wine) {
+        wineStore.deleteWine(wine.id);
+        updateFilteredAndSortedWines({
+            sortColumn: 'id',
+            sortOrder: 'desc',
+            filterColor: '',
+            filterVintage: null,
+        });
+    }
 </script>

@@ -17,12 +17,12 @@ export class Wine {
         public quantityDrunk: number
     ) {}
 
-    isInStock(): boolean {
-        return this.quantityLeft > 0;
-    }
+    // isInStock(): boolean {
+    //     return this.quantityLeft > 0;
+    // }
 
-    isAtPeak(currentYear: number): boolean {
-        const [startYear, endYear] = this.peak.split('-').map(Number);
-        return currentYear >= startYear && currentYear <= endYear;
-    }
+    // isAtPeak(currentYear: number): boolean {
+    //     const [startYear, endYear] = this.peak.split('-').map(Number);
+    //     return currentYear >= startYear && currentYear <= endYear;
+    // }
 }

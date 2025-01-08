@@ -227,6 +227,13 @@ export const useWineStore = defineStore('wineStore', () => {
         }
     }
 
+    function deleteWine(wineId: number) {
+        const index = wines.value.findIndex((wine) => wine.id === wineId);
+        if (index !== -1) {
+            wines.value.splice(index, 1);
+        }
+    }
+
     function generateId(): number {
         if (wines.value.length === 0) {
             return 1; // Si aucun vin n'est présent, commence à 1
@@ -237,5 +244,12 @@ export const useWineStore = defineStore('wineStore', () => {
         return maxId + 1; // Retourne l'ID suivant
     }
 
-    return { wines, addNewWine, updateWine, getAllWineTypes, getWineTypeMap };
+    return {
+        wines,
+        addNewWine,
+        updateWine,
+        deleteWine,
+        getAllWineTypes,
+        getWineTypeMap,
+    };
 });
