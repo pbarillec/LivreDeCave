@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="bg-paper text-ink min-h-screen p-4">
-            <h1 class="text-4xl font-serif">Ma Cave</h1>
+            <h1 class="text-4xl font-serif">Historique des vins consommés</h1>
 
             <!-- Composant de tri et filtre -->
             <SortAndFilterComponent

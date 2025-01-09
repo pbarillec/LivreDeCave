@@ -38,3 +38,7 @@ src-tauri/bundles/
 # Rust/Cargo specific files (for Tauri)
 Cargo.lock
 target/
+
+# Mon fichier wine.json
+src-tauri/src-tauri
+src-tauri/src-tauri/wine.json
