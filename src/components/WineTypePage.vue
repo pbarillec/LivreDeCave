@@ -348,7 +348,7 @@
                         </div>
                         <div>
                             <label class="block text-gray-700 font-medium mb-1"
-                                >Contenance de la bouteille :</label
+                                >Contenance de la bouteille (ml) :</label
                             >
                             <input
                                 type="number"
@@ -377,9 +377,10 @@
                                 >Date de consommation optimale :</label
                             >
                             <input
-                                type="date"
+                                type="number"
                                 v-model="newWine.peak"
                                 class="w-full border-gray-300 rounded px-3 py-2"
+                                placeholder="Ex : 2030"
                             />
                         </div>
                     </div>
@@ -472,6 +473,19 @@
         }
     );
 
+    watch(
+        () => wineStore.wines,
+        () => {
+            updateFilteredAndSortedWines({
+                sortColumn: 'id',
+                sortOrder: 'desc',
+                filterColor: '',
+                filterVintage: null,
+            });
+        },
+        { deep: true }
+    );
+
     // Initialiser les vins filtrés
     onMounted(() => {
         updateFilteredAndSortedWines({
@@ -557,21 +571,21 @@
     // Modèle pour un nouveau vin
     const newWine = ref<Wine>(
         new Wine(
-            0,
-            '',
-            '',
-            '',
-            'Rouge',
-            0,
-            '',
-            0,
-            0,
-            0,
-            0,
-            '',
-            '',
-            wineTypeUrl.value,
-            0
+            0, // id
+            '', // name
+            '', // appellation
+            '', // producer
+            'Rouge', // color
+            0, // vintage
+            '', // purchaseDate
+            0, // purchasePrice
+            750, // bottleSize
+            6, // quantityBought
+            0, // quantityLeft
+            2030, // peak
+            '', // notes
+            wineTypeUrl.value, // wineType
+            0 // quantityDrunk
         )
     );
 

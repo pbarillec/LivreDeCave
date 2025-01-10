@@ -25,8 +25,8 @@ pub fn run() {
 }
 
 // Structure Wine poour représenter un vin
-#[allow(non_snake_case)]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "camelCase")] // Convertit automatiquement les noms des champs en camelCase
 struct Wine {
     id: u32,
     name: String,
@@ -34,22 +34,16 @@ struct Wine {
     producer: String,
     color: String,
     vintage: u16,
-    purchaseDate: String,
-    purchasePrice: f32,
-    bottleSize: u16,
-    quantityBought: u16,
-    quantityLeft: u16,
-    quantityDrunk: u16,
+    purchase_date: String,
+    purchase_price: f32,
+    bottle_size: u16,
+    quantity_bought: u16,
+    quantity_left: u16,
+    quantity_drunk: u16,
     notes: String,
-    wineType: String,
-    peak: String,
+    wine_type: String,
+    peak: u16,
 }
-// fn get_wine_file_path() -> PathBuf {
-//     let mut path = env::current_dir().expect("Impossible d'obtenir le répertoire courant");
-//     path.push("wines.json");
-//     println!("Chemin calculé pour le fichier JSON : {:?}", path);
-//     path
-// }
 
 fn get_wine_file_path() -> PathBuf {
     if cfg!(debug_assertions) {
@@ -97,9 +91,7 @@ fn save_wines(wines: Vec<Wine>) -> Result<(), String> {
 
 // Commande pour ajouter un vin
 #[tauri::command]
-fn add_wine(wine: Wine) -> Result<(), String> {
-    println!("Nouveau vin: {:?}", wine);
-
+fn add_wine(wine: Wine) -> Result<Wine, String> {
     // Charger les vins existants
     let mut wines = match load_wines() {
         Ok(w) => w,
@@ -111,7 +103,8 @@ fn add_wine(wine: Wine) -> Result<(), String> {
 
     println!("Vins avant ajout : {:?}", wines);
 
-    // Ajouter le nouveau vin
+    // Cloner le vin avant de l'ajouter
+    let cloned_wine = wine.clone();
     wines.push(wine);
 
     // Sauvegarder les vins
@@ -121,13 +114,22 @@ fn add_wine(wine: Wine) -> Result<(), String> {
     }
 
     println!("Vin ajouté et sauvegardé avec succès.");
-    Ok(())
+    Ok(cloned_wine)
 }
 
 // Commande pour supprimer un vin
 #[tauri::command]
 fn delete_wine(id: u32) -> Result<(), String> {
-    let mut wines = load_wines().unwrap_or_default();
+    println!("Id du vin a delete : {}", id);
+    // Charger les vins existants
+    let mut wines = match load_wines() {
+        Ok(w) => w,
+        Err(e) => {
+            println!("Erreur lors du chargement des vins : {}", e);
+            return Err(e);
+        }
+    };
+
     wines.retain(|wine| wine.id != id);
     save_wines(wines)
 }

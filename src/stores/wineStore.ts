@@ -226,18 +226,17 @@ export const useWineStore = defineStore('wineStore', () => {
 
     async function addNewWine(newWine: Wine) {
         try {
-            console.log(newWine);
             newWine.id = generateId(); // Assigne un nouvel ID unique
             newWine.quantityLeft = newWine.quantityBought; // Initialise la quantité restante
-            await invoke('add_wine', { wine: newWine });
-            await loadWines();
+
+            const addedWine = await invoke<Wine>('add_wine', { wine: newWine });
+
+            // Mettre à jour directement le store
+            wines.value.push(addedWine);
+            console.log('Liste de vins : ', wines.value);
         } catch (error) {
             console.error("Erreur lors de l'ajout du vin:", error);
         }
-        // newWine.id = generateId(); // Assigne un nouvel ID unique
-        // newWine.quantityLeft = newWine.quantityBought; // Initialise la quantité restante
-
-        // wines.value.push(newWine);
     }
 
     async function updateWine(updatedWine: Wine) {
@@ -256,8 +255,9 @@ export const useWineStore = defineStore('wineStore', () => {
     }
 
     async function deleteWine(wineId: number) {
+        console.log('Suppression du vin avec ID:', wineId);
         try {
-            await invoke('delete_wine', { wineId });
+            await invoke('delete_wine', { id: wineId });
             await loadWines(); // Recharger la liste des vins
         } catch (error) {
             console.error('Erreur lors de la suppression du vin:', error);

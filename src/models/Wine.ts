@@ -11,7 +11,7 @@ export class Wine {
         public bottleSize: number,
         public quantityBought: number,
         public quantityLeft: number,
-        public peak: string,
+        public peak: number,
         public notes: string,
         public wineType: string,
         public quantityDrunk: number
