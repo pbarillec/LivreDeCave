@@ -40,5 +40,4 @@ Cargo.lock
 target/
 
 # Mon fichier wine.json
-src-tauri/src-tauri
-src-tauri/src-tauri/wine.json
+**/wines.json

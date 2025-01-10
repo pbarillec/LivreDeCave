@@ -25,6 +25,7 @@ pub fn run() {
 }
 
 // Structure Wine poour représenter un vin
+#[allow(non_snake_case)]
 #[derive(Serialize, Deserialize, Debug)]
 struct Wine {
     id: u32,
@@ -43,21 +44,30 @@ struct Wine {
     wineType: String,
     peak: String,
 }
-
-// Chemin absolu vers le fichier JSON
 // fn get_wine_file_path() -> PathBuf {
 //     let mut path = env::current_dir().expect("Impossible d'obtenir le répertoire courant");
-//     path.push("src-tauri");
 //     path.push("wines.json");
+//     println!("Chemin calculé pour le fichier JSON : {:?}", path);
 //     path
 // }
 
 fn get_wine_file_path() -> PathBuf {
-    let mut path = env::current_dir().expect("Impossible d'obtenir le répertoire courant");
-    path.push("src-tauri");
-    path.push("wines.json");
-    println!("Chemin calculé pour le fichier JSON : {:?}", path);
-    path
+    if cfg!(debug_assertions) {
+        // Mode développement
+        let mut path = env::current_dir().expect("Impossible d'obtenir le répertoire courant");
+        path.push("wines.json");
+        println!("Chemin calculé pour le fichier JSON (dev) : {:?}", path);
+        path
+    } else {
+        // Mode production (AppData sur Windows, ou équivalent)
+        let home_dir = dirs::data_dir().expect("Impossible d'obtenir le répertoire utilisateur");
+        let mut path = home_dir;
+        path.push("livredecave");
+        fs::create_dir_all(&path).expect("Impossible de créer le répertoire pour les données");
+        path.push("wines.json");
+        println!("Chemin calculé pour le fichier JSON (prod) : {:?}", path);
+        path
+    }
 }
 
 // Commande pour charger les vins

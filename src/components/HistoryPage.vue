@@ -14,7 +14,6 @@
                 :wines="filteredAndSortedWines"
                 :columns="columnsToDisplay"
                 :actions="availableActions"
-                @consume="handleConsume"
                 @edit="handleEdit"
                 @delete="handleDelete"
             />
@@ -101,15 +100,13 @@
         filteredAndSortedWines.value = result;
     };
 
-    function handleConsume(wine: Wine) {
-        // wineStore.consume(wine);
-    }
-
     function handleEdit(wine: Wine) {
+        console.log(wine);
         // wineStore.edit(wine);
     }
 
     function handleDelete(wine: Wine) {
+        console.log(wine);
         // wineStore.delete(wine);
     }
 </script>
