@@ -116,7 +116,7 @@
         vintage: 'Millésime',
         purchaseDate: "Date d'achat",
         purchasePrice: "Prix d'achat",
-        bottleSize: 'Contenance',
+        bottleSize: 'Contenance (cl)',
         quantityBought: 'Quantité achetée',
         quantityLeft: 'Quantité Restante',
         quantityDrunk: 'Quantité Bue',

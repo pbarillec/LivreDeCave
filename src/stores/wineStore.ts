@@ -233,7 +233,6 @@ export const useWineStore = defineStore('wineStore', () => {
 
             // Mettre à jour directement le store
             wines.value.push(addedWine);
-            console.log('Liste de vins : ', wines.value);
         } catch (error) {
             console.error("Erreur lors de l'ajout du vin:", error);
         }
@@ -246,26 +245,15 @@ export const useWineStore = defineStore('wineStore', () => {
         } catch (error) {
             console.error('Erreur lors de la mise à jour du vin:', error);
         }
-        // const index = wines.value.findIndex(
-        //     (wine) => wine.id === updatedWine.id
-        // );
-        // if (index !== -1) {
-        //     wines.value[index] = updatedWine;
-        // }
     }
 
     async function deleteWine(wineId: number) {
-        console.log('Suppression du vin avec ID:', wineId);
         try {
             await invoke('delete_wine', { id: wineId });
             await loadWines(); // Recharger la liste des vins
         } catch (error) {
             console.error('Erreur lors de la suppression du vin:', error);
         }
-        // const index = wines.value.findIndex((wine) => wine.id === wineId);
-        // if (index !== -1) {
-        //     wines.value.splice(index, 1);
-        // }
     }
 
     function generateId(): number {
