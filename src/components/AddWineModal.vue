@@ -178,6 +178,9 @@
         } as unknown as PropType<(wine: Wine) => void>,
     });
 
+    // Date du jour
+    const today = new Date().toISOString().split('T')[0];
+
     const emit = defineEmits(['update:modelValue']);
 
     // Proxy pour `v-model`
@@ -195,7 +198,7 @@
             '', // producer
             'Rouge', // color
             0, // vintage
-            '', // purchaseDate
+            today, // purchaseDate
             0, // purchasePrice
             750, // bottleSize
             6, // quantityBought

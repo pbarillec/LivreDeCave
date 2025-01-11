@@ -55,7 +55,13 @@
                         :key="column"
                         class="border border-gray-300 px-4 py-2"
                     >
-                        {{ wine[column as keyof Wine] }}
+                        {{
+                            column === 'purchaseDate'
+                                ? formatDate(String(wine[column as keyof Wine]))
+                                : wine[column as keyof Wine]
+                        }}
+
+                        <!-- {{ wine[column as keyof Wine] }} -->
                     </td>
                     <td
                         v-if="actions.length"
@@ -123,6 +129,12 @@
         peak: 'Apogée',
         notes: 'Commentaires',
     };
+
+    function formatDate(date: string): string {
+        if (!date) return '';
+        const [year, month, day] = date.split('-');
+        return `${day}-${month}-${year}`;
+    }
 
     function computeNumberOfBottleByColor(color: string) {
         const winesFound = props.wines.filter((wine) => wine.color === color);
