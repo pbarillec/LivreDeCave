@@ -60,8 +60,6 @@
                                 ? formatDate(String(wine[column as keyof Wine]))
                                 : wine[column as keyof Wine]
                         }}
-
-                        <!-- {{ wine[column as keyof Wine] }} -->
                     </td>
                     <td
                         v-if="actions.length"

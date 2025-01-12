@@ -28,65 +28,13 @@
                 @delete="handleDeleteWine"
             />
 
-            <!-- Modale pour consommer un vin -->
-            <VueFinalModal
+            <DrinkWineModal
                 v-model="isConsumeModalVisible"
-                content-class="bg-white p-6 rounded-lg max-w-lg mx-auto"
-                overlay-class="bg-black bg-opacity-50"
-            >
-                <h2 class="text-2xl font-bold mb-4">
-                    Consommer : {{ selectedWine?.name }}
-                </h2>
-                <div v-if="selectedWine">
-                    <p class="mb-2">
-                        <strong>Appellation :</strong>
-                        {{ selectedWine.appellation }}
-                    </p>
-                    <p class="mb-4">
-                        <strong>Quantité restante :</strong>
-                        {{ selectedWine.quantityLeft }}
-                    </p>
-                    <div>
-                        <label for="quantity" class="block font-semibold mb-1">
-                            Combien de bouteilles voulez-vous consommer ?
-                        </label>
-                        <input
-                            id="quantity"
-                            v-model.number="quantityToConsume"
-                            type="number"
-                            min="1"
-                            :max="selectedWine.quantityLeft"
-                            class="border border-gray-300 rounded px-2 py-1 w-full"
-                        />
-                    </div>
-                    <div class="mt-4">
-                        <label for="comment" class="block font-semibold mb-1">
-                            Ajouter un commentaire :
-                        </label>
-                        <textarea
-                            id="comment"
-                            v-model="comment"
-                            class="border border-gray-300 rounded px-2 py-1 w-full"
-                            rows="3"
-                            placeholder="Ajouter un commentaire..."
-                        ></textarea>
-                    </div>
-                    <div class="flex justify-end mt-4">
-                        <button
-                            @click="closeConsumeModal"
-                            class="mr-2 px-4 py-2 bg-gray-500 text-white rounded"
-                        >
-                            Annuler
-                        </button>
-                        <button
-                            @click="handleConsumption"
-                            class="px-4 py-2 bg-blue-500 text-white rounded"
-                        >
-                            Confirmer
-                        </button>
-                    </div>
-                </div>
-            </VueFinalModal>
+                :selectedWine="selectedWine || ({} as Wine)"
+                :quantityToConsume="quantityToConsume"
+                :comment="comment"
+                :on-consume-wine="handleConsumption"
+            />
 
             <EditWineModal
                 v-model="isEditModalVisible"
@@ -111,9 +59,9 @@
     import WineTable from '../components/WineTable.vue';
     import { Wine } from '../models/Wine';
     import { useWineStore } from '../stores/wineStore';
-    import { VueFinalModal } from 'vue-final-modal';
     import AddWineModal from './AddWineModal.vue';
     import EditWineModal from './EditWineModal.vue';
+    import DrinkWineModal from './DrinkWineModal.vue';
 
     // Charger le store
     const wineStore = useWineStore();
@@ -249,17 +197,17 @@
         selectedWine.value = null;
     }
 
-    function handleConsumption() {
-        if (!selectedWine.value || quantityToConsume.value <= 0) return;
+    function handleConsumption(quantityToConsume: number, comment: string) {
+        if (!selectedWine.value || quantityToConsume <= 0) return;
 
-        if (quantityToConsume.value > selectedWine.value.quantityLeft) {
+        if (quantityToConsume > selectedWine.value.quantityLeft) {
             alert('Quantité invalide !');
             return;
         }
 
-        selectedWine.value.quantityLeft -= quantityToConsume.value;
-        selectedWine.value.quantityDrunk += quantityToConsume.value;
-        selectedWine.value.notes = comment.value;
+        selectedWine.value.quantityLeft -= quantityToConsume;
+        selectedWine.value.quantityDrunk += quantityToConsume;
+        selectedWine.value.notes = comment;
 
         wineStore.updateWine(selectedWine.value);
         closeConsumeModal();
