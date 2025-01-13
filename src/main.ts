@@ -3,6 +3,7 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import './styles/tailwind.css';
+import './styles/global.css';
 import { createVfm } from 'vue-final-modal';
 import 'vue-final-modal/style.css'; // Ajoutez les styles de Vue Final Modal si nécessaire
 

@@ -1,0 +1,59 @@
+/* Positionnement de la modale. */
+.fixed-center {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+/* Animation pour l'overlay. */
+.fade-enter-active {
+    animation: fadeIn 1s ease;
+}
+.fade-leave-active {
+    animation: fadeOut 1s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+.custom-overlay {
+    pointer-events: auto;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+}
+
+/* Animation pour le contenu de la modale. */
+.slide-up-enter-active,
+.slide-up-leave-active {
+    transition:
+        transform 0.8s ease,
+        opacity 0.3s ease;
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+    transform: translateY(50px);
+    opacity: 0;
+}

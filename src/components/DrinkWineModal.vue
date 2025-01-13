@@ -1,9 +1,12 @@
 <template>
     <!-- Modale pour consommer un vin -->
+
     <VueFinalModal
         v-model="isConsumeModalVisible"
-        content-class="bg-white p-6 rounded-lg max-w-lg mx-auto"
-        overlay-class="bg-black bg-opacity-50"
+        content-class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg max-w-lg mx-auto shadow-lg"
+        overlay-class="fixed inset-0 bg-black bg-opacity-50"
+        overlay-transition="fade"
+        content-transition="slide-up"
     >
         <h2 class="text-2xl font-bold mb-4">
             Consommer : {{ selectedWine?.name }}

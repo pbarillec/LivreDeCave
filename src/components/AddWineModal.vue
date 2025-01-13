@@ -2,8 +2,10 @@
     <!-- Modale pour ajouter un vin -->
     <VueFinalModal
         v-model="isModalVisible"
-        content-class="bg-white p-6 rounded-lg max-w-4xl mx-auto"
+        content-class="fixed-center bg-white p-6 rounded-lg max-w-lg mx-auto shadow-lg"
         overlay-class="bg-black bg-opacity-50"
+        overlay-transition="fade"
+        content-transition="slide-up"
     >
         <h2 class="text-2xl font-bold mb-6">
             Ajouter un vin - {{ wineTypeDisplayName }}
