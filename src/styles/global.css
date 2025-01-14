@@ -1,3 +1,11 @@
+html,
+body {
+    overflow: hidden;
+    height: 100%; /* Empêche tout dépassement de la hauteur */
+    margin: 0;
+    padding: 0;
+}
+
 /* Positionnement de la modale. */
 .fixed-center {
     position: fixed;

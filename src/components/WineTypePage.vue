@@ -18,15 +18,18 @@
                 Ajouter un vin
             </button>
 
-            <!-- Tableau des vins -->
-            <WineTable
-                :wines="filteredAndSortedWines"
-                :columns="columnsToDisplay"
-                :actions="availableActions"
-                @consume="openConsumeModal"
-                @edit="openEditModal"
-                @delete="handleDeleteWine"
-            />
+            <!-- Conteneur du tableau avec scroll -->
+            <div class="table-container">
+                <!-- Tableau des vins -->
+                <WineTable
+                    :wines="filteredAndSortedWines"
+                    :columns="columnsToDisplay"
+                    :actions="availableActions"
+                    @consume="openConsumeModal"
+                    @edit="openEditModal"
+                    @delete="handleDeleteWine"
+                />
+            </div>
 
             <DrinkWineModal
                 v-model="isConsumeModalVisible"
@@ -294,3 +297,17 @@
         });
     }
 </script>
+<style scoped>
+    .wine-page-container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh; /* Hauteur totale de la fenêtre */
+        overflow: hidden; /* Empêche tout défilement global */
+    }
+
+    .table-container {
+        flex: 1; /* Prend l'espace restant après l'en-tête */
+        overflow-y: auto; /* Permet le défilement vertical uniquement dans ce conteneur */
+        margin-top: 10px;
+    }
+</style>

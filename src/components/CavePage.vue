@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="bg-paper text-ink min-h-screen p-4">
-            <h1 class="text-4xl font-serif">Ma Cave</h1>
+            <!-- <h1 class="text-4xl font-serif">Ma Cave</h1> -->
             <table
                 class="table-auto w-full border-collapse border border-gray-300 mt-4"
             >
