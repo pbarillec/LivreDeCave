@@ -10,6 +10,7 @@
         <h2 class="text-2xl font-bold mb-6">
             Ajouter un vin - {{ wineTypeDisplayName }}
         </h2>
+
         <form @submit.prevent="submitForm">
             <!-- Ligne 1 -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
@@ -17,23 +18,45 @@
                     <label class="block text-gray-700 font-medium mb-1"
                         >Nom du vin :</label
                     >
-                    <input
-                        type="text"
-                        v-model="newWine.name"
-                        class="w-full border-gray-300 rounded px-3 py-2"
-                        placeholder="Ex : Château Margaux"
-                    />
+                    <Field
+                        name="name"
+                        rules="required|min:3"
+                        v-slot="{ field, errors }"
+                    >
+                        <input
+                            v-bind="field"
+                            type="text"
+                            class="w-full border-gray-300 rounded px-3 py-2"
+                            placeholder="Ex : Château Margaux"
+                        />
+                        <span
+                            v-if="errors.length"
+                            class="text-red-500 text-sm"
+                            >{{ errors[0] }}</span
+                        >
+                    </Field>
                 </div>
                 <div>
                     <label class="block text-gray-700 font-medium mb-1"
                         >Appellation :</label
                     >
-                    <input
-                        type="text"
-                        v-model="newWine.appellation"
-                        class="w-full border-gray-300 rounded px-3 py-2"
-                        placeholder="Ex : Margaux"
-                    />
+                    <Field
+                        name="appellation"
+                        rules="required|min:3"
+                        v-slot="{ field, errors }"
+                    >
+                        <input
+                            v-bind="field"
+                            type="text"
+                            class="w-full border-gray-300 rounded px-3 py-2"
+                            placeholder="Ex : Margaux"
+                        />
+                        <span
+                            v-if="errors.length"
+                            class="text-red-500 text-sm"
+                            >{{ errors[0] }}</span
+                        >
+                    </Field>
                 </div>
             </div>
 
@@ -43,25 +66,47 @@
                     <label class="block text-gray-700 font-medium mb-1"
                         >Producteur :</label
                     >
-                    <input
-                        type="text"
-                        v-model="newWine.producer"
-                        class="w-full border-gray-300 rounded px-3 py-2"
-                        placeholder="Ex : Château Margaux"
-                    />
+                    <Field
+                        name="producer"
+                        rules="required|min:3"
+                        v-slot="{ field, errors }"
+                    >
+                        <input
+                            v-bind="field"
+                            type="text"
+                            class="w-full border-gray-300 rounded px-3 py-2"
+                            placeholder="Ex : Château Margaux"
+                        />
+                        <span
+                            v-if="errors.length"
+                            class="text-red-500 text-sm"
+                            >{{ errors[0] }}</span
+                        >
+                    </Field>
                 </div>
                 <div>
                     <label class="block text-gray-700 font-medium mb-1"
                         >Couleur :</label
                     >
-                    <select
-                        v-model="newWine.color"
-                        class="w-full border-gray-300 rounded px-3 py-2"
+                    <Field
+                        name="color"
+                        rules="required"
+                        v-slot="{ field, errors }"
                     >
-                        <option value="Rouge">Rouge</option>
-                        <option value="Blanc">Blanc</option>
-                        <option value="Rosé">Rosé</option>
-                    </select>
+                        <select
+                            v-bind="field"
+                            class="w-full border-gray-300 rounded px-3 py-2"
+                        >
+                            <option value="Rouge">Rouge</option>
+                            <option value="Blanc">Blanc</option>
+                            <option value="Rosé">Rosé</option>
+                        </select>
+                        <span
+                            v-if="errors.length"
+                            class="text-red-500 text-sm"
+                            >{{ errors[0] }}</span
+                        >
+                    </Field>
                 </div>
             </div>
 
@@ -71,22 +116,44 @@
                     <label class="block text-gray-700 font-medium mb-1"
                         >Millésime :</label
                     >
-                    <input
-                        type="number"
-                        v-model="newWine.vintage"
-                        class="w-full border-gray-300 rounded px-3 py-2"
-                        placeholder="Ex : 2015"
-                    />
+                    <Field
+                        name="vintage"
+                        rules="required|integer|min_value:1900|max_value:2099"
+                        v-slot="{ field, errors }"
+                    >
+                        <input
+                            v-bind="field"
+                            type="number"
+                            class="w-full border-gray-300 rounded px-3 py-2"
+                            placeholder="Ex : 2015"
+                        />
+                        <span
+                            v-if="errors.length"
+                            class="text-red-500 text-sm"
+                            >{{ errors[0] }}</span
+                        >
+                    </Field>
                 </div>
                 <div>
                     <label class="block text-gray-700 font-medium mb-1"
                         >Date d'achat :</label
                     >
-                    <input
-                        type="date"
-                        v-model="newWine.purchaseDate"
-                        class="w-full border-gray-300 rounded px-3 py-2"
-                    />
+                    <Field
+                        name="purchaseDate"
+                        rules="required|date"
+                        v-slot="{ field, errors }"
+                    >
+                        <input
+                            v-bind="field"
+                            type="date"
+                            class="w-full border-gray-300 rounded px-3 py-2"
+                        />
+                        <span
+                            v-if="errors.length"
+                            class="text-red-500 text-sm"
+                            >{{ errors[0] }}</span
+                        >
+                    </Field>
                 </div>
             </div>
 
@@ -96,24 +163,46 @@
                     <label class="block text-gray-700 font-medium mb-1"
                         >Prix d'achat :</label
                     >
-                    <input
-                        type="number"
-                        step="0.01"
-                        v-model="newWine.purchasePrice"
-                        class="w-full border-gray-300 rounded px-3 py-2"
-                        placeholder="Ex : 25.50"
-                    />
+                    <Field
+                        name="purchasePrice"
+                        rules="required|numeric|min_value:0"
+                        v-slot="{ field, errors }"
+                    >
+                        <input
+                            v-bind="field"
+                            type="number"
+                            step="0.01"
+                            class="w-full border-gray-300 rounded px-3 py-2"
+                            placeholder="Ex : 25.50"
+                        />
+                        <span
+                            v-if="errors.length"
+                            class="text-red-500 text-sm"
+                            >{{ errors[0] }}</span
+                        >
+                    </Field>
                 </div>
                 <div>
                     <label class="block text-gray-700 font-medium mb-1"
                         >Contenance de la bouteille (cl) :</label
                     >
-                    <input
-                        type="number"
-                        v-model="newWine.bottleSize"
-                        class="w-full border-gray-300 rounded px-3 py-2"
-                        placeholder="Ex : 75 (en cl)"
-                    />
+                    <Field
+                        name="bottleSize"
+                        rules="required|integer|min_value:1"
+                        v-slot="{ field, errors }"
+                    >
+                        <input
+                            v-bind="field"
+                            type="number"
+                            class="w-full border-gray-300 rounded px-3 py-2"
+                            placeholder="Ex : 75 (en cl)"
+                        />
+                        <span
+                            v-if="errors.length"
+                            class="text-red-500 text-sm"
+                            >{{ errors[0] }}</span
+                        >
+                    </Field>
                 </div>
             </div>
 
@@ -123,23 +212,45 @@
                     <label class="block text-gray-700 font-medium mb-1"
                         >Quantité achetée :</label
                     >
-                    <input
-                        type="number"
-                        v-model="newWine.quantityBought"
-                        class="w-full border-gray-300 rounded px-3 py-2"
-                        placeholder="Ex : 6"
-                    />
+                    <Field
+                        name="quantityBought"
+                        rules="required|integer|min_value:1"
+                        v-slot="{ field, errors }"
+                    >
+                        <input
+                            v-bind="field"
+                            type="number"
+                            class="w-full border-gray-300 rounded px-3 py-2"
+                            placeholder="Ex : 6"
+                        />
+                        <span
+                            v-if="errors.length"
+                            class="text-red-500 text-sm"
+                            >{{ errors[0] }}</span
+                        >
+                    </Field>
                 </div>
                 <div>
                     <label class="block text-gray-700 font-medium mb-1"
                         >Date de consommation optimale :</label
                     >
-                    <input
-                        type="number"
-                        v-model="newWine.peak"
-                        class="w-full border-gray-300 rounded px-3 py-2"
-                        placeholder="Ex : 2030"
-                    />
+                    <Field
+                        name="peak"
+                        rules="required|integer|min_value:1900|max_value:2099"
+                        v-slot="{ field, errors }"
+                    >
+                        <input
+                            v-bind="field"
+                            type="number"
+                            class="w-full border-gray-300 rounded px-3 py-2"
+                            placeholder="Ex : 2030"
+                        />
+                        <span
+                            v-if="errors.length"
+                            class="text-red-500 text-sm"
+                            >{{ errors[0] }}</span
+                        >
+                    </Field>
                 </div>
             </div>
 
@@ -166,6 +277,8 @@
     import { VueFinalModal } from 'vue-final-modal';
     import { PropType, ref, computed } from 'vue';
     import { Wine } from '../models/Wine';
+    import { useForm, Field, Form, ErrorMessage } from 'vee-validate';
+    import * as yup from 'yup';
 
     const props = defineProps({
         modelValue: {
@@ -180,9 +293,6 @@
         } as unknown as PropType<(wine: Wine) => void>,
     });
 
-    // Date du jour
-    const today = new Date().toISOString().split('T')[0];
-
     const emit = defineEmits(['update:modelValue']);
 
     // Proxy pour `v-model`
@@ -191,33 +301,83 @@
         set: (value: boolean) => emit('update:modelValue', value),
     });
 
-    // Modèle pour un nouveau vin
-    const newWine = ref<Wine>(
-        new Wine(
+    // Schéma de validation Yup
+    const validationSchema = yup.object({
+        name: yup
+            .string()
+            .required('Le nom du vin est requis')
+            .min(3, 'Le nom doit comporter au moins 3 caractères'),
+        appellation: yup.string().required("L'appellation est requise"),
+        producer: yup.string().required('Le producteur est requis'),
+        color: yup.string().required('La couleur est requise'),
+        vintage: yup
+            .number()
+            .required('Le millésime est requis')
+            .min(1900, 'Millésime non valide')
+            .max(new Date().getFullYear(), 'Millésime non valide'),
+        purchaseDate: yup.string().required("La date d'achat est requise"),
+        purchasePrice: yup
+            .number()
+            .required("Le prix d'achat est requis")
+            .min(1, 'Le prix doit être supérieur à 1'),
+        bottleSize: yup
+            .number()
+            .required('La contenance est requise')
+            .min(1, 'La contenance doit être supérieure à 1'),
+        quantityBought: yup
+            .number()
+            .required('La quantité achetée est requise')
+            .min(1, 'La quantité doit être supérieure à 0'),
+        peak: yup
+            .number()
+            .required("L'apogée est requise")
+            .min(new Date().getFullYear(), "L'apogée doit être dans le futur"),
+    });
+
+    // Initialisation de Vee-Validate
+    const { handleSubmit, resetForm } = useForm({
+        validationSchema,
+        initialValues: {
+            name: '',
+            appellation: '',
+            producer: '',
+            color: 'Rouge',
+            vintage: '',
+            purchaseDate: new Date().toISOString().split('T')[0],
+            purchasePrice: '',
+            bottleSize: '',
+            quantityBought: '',
+            peak: '',
+        },
+    });
+
+    // Gestion de la soumission
+    const submitForm = handleSubmit((values) => {
+        const newWine = new Wine(
             0, // id
-            '', // name
-            '', // appellation
-            '', // producer
-            'Rouge', // color
-            0, // vintage
-            today, // purchaseDate
-            0, // purchasePrice
-            750, // bottleSize
-            6, // quantityBought
+            values.name,
+            values.appellation,
+            values.producer,
+            values.color,
+            parseInt(values.vintage, 10),
+            values.purchaseDate,
+            parseFloat(values.purchasePrice),
+            parseInt(values.bottleSize, 10),
+            parseInt(values.quantityBought, 10),
             0, // quantityLeft
-            2030, // peak
+            parseInt(values.peak, 10),
             '', // notes
             props.wineTypeUrl ?? '', // wineType
             0 // quantityDrunk
-        )
-    );
+        );
 
-    function submitForm() {
         if (props.onAddWine) {
-            props.onAddWine(newWine.value); // Appelle la fonction d'ajout
+            props.onAddWine(newWine);
         }
+
+        resetForm(); // Réinitialise le formulaire après soumission
         closeModal();
-    }
+    });
 
     // Fermer la modale
     function closeModal() {

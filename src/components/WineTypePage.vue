@@ -215,16 +215,37 @@
 
     // Variables pour la modale d'ajout
     const isAddModalVisible = ref(false);
+    const addWineErrors = ref<string[]>([]);
 
     function openAddModal() {
         isAddModalVisible.value = true;
+        addWineErrors.value = []; // Réinitialise les erreurs
     }
 
     function closeAddModal() {
         isAddModalVisible.value = false;
+        addWineErrors.value = [];
+    }
+
+    function validateWine(wine: Wine): boolean {
+        const errors: string[] = [];
+        if (!wine.name.trim()) errors.push('Le nom du vin est requis.');
+        if (!wine.appellation.trim()) errors.push("L'appellation est requise.");
+        if (!wine.producer.trim()) errors.push('Le producteur est requis.');
+        if (!wine.vintage) errors.push('Le millésime est requis.');
+        if (!wine.purchaseDate.trim())
+            errors.push("La date d'achat est requise.");
+        if (wine.purchasePrice <= 0)
+            errors.push("Le prix d'achat doit être supérieur à zéro.");
+
+        addWineErrors.value = errors;
+        return errors.length === 0;
     }
 
     function handleAddWine(wine: Wine) {
+        if (!validateWine(wine)) {
+            return; // Bloque si des erreurs existent
+        }
         wineStore.addNewWine(wine);
 
         updateFilteredAndSortedWines({
