@@ -27,6 +27,21 @@ const router = createRouter({
 });
 // Création de l'application Vue
 const app = createApp(App);
+
+app.directive('click-outside', {
+    beforeMount(el, binding) {
+        el.clickOutsideHandler = (event: { target: any }) => {
+            if (!(el === event.target || el.contains(event.target))) {
+                binding.value(event);
+            }
+        };
+        document.addEventListener('click', el.clickOutsideHandler);
+    },
+    unmounted(el) {
+        document.removeEventListener('click', el.clickOutsideHandler);
+    },
+});
+
 // Utilisation de Pinia
 app.use(createPinia());
 // Utilisation de Vue Final Modal

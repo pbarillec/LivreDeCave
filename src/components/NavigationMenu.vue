@@ -1,87 +1,212 @@
 <template>
-    <nav class="navigation-bar">
-        <!-- Logo et titre -->
-        <div class="logo-container">
-            <img src="@/assets/images/logo.png" alt="Logo" class="logo" />
-            <span class="app-title">Ma Cave</span>
-        </div>
-
-        <!-- Menu de navigation -->
-        <ul class="nav-links">
-            <li><router-link to="/">Accueil</router-link></li>
-            <li
-                v-for="[displayName, routeName] in wineTypeMap"
-                :key="routeName"
-            >
-                <router-link :to="'/type/' + routeName">
-                    {{ displayName }}
+    <nav v-click-outside="closeAllDropdowns">
+        <ul class="menu">
+            <!-- Lien vers la page d'accueil -->
+            <li>
+                <router-link to="/" :class="{ active: $route.path === '/' }">
+                    Accueil
                 </router-link>
             </li>
-            <li><router-link to="/history">Historique</router-link></li>
+
+            <!-- Menu déroulant pour les régions -->
+            <li class="dropdown" :class="{ active: isRegionalActive }">
+                <a href="#" class="dropdown-trigger">Vins par régions</a>
+                <ul>
+                    <li
+                        v-for="[displayName, routeName] in regionalWineTypeMap"
+                        :key="routeName"
+                    >
+                        <router-link
+                            :to="'/type/' + routeName"
+                            :class="{
+                                active: $route.path === '/type/' + routeName,
+                            }"
+                        >
+                            {{ displayName }}
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Menu déroulant pour les autres types -->
+            <li class="dropdown" :class="{ active: isOtherActive }">
+                <a href="#" class="dropdown-trigger">Autres vins</a>
+                <ul>
+                    <li
+                        v-for="[displayName, routeName] in otherWineTypeMap"
+                        :key="routeName"
+                    >
+                        <router-link
+                            :to="'/type/' + routeName"
+                            :class="{
+                                active: $route.path === '/type/' + routeName,
+                            }"
+                        >
+                            {{ displayName }}
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Lien vers l'historique -->
+            <li>
+                <router-link
+                    to="/history"
+                    :class="{ active: $route.path === '/history' }"
+                >
+                    Historique
+                </router-link>
+            </li>
         </ul>
     </nav>
 </template>
 
 <script setup>
     import { useWineStore } from '../stores/wineStore';
-    import { computed } from 'vue';
+    import { computed, ref } from 'vue';
+    import { useRoute } from 'vue-router';
+
     const wineStore = useWineStore();
     const wineTypeMap = computed(() =>
         Array.from(wineStore.getWineTypeMap().entries())
+    );
+    const route = useRoute();
+
+    // Filtrer les régions
+    const regionalWineTypeMap = computed(() =>
+        wineTypeMap.value.filter(
+            ([displayName]) =>
+                !['Champagne', 'Pétillant', 'Divers', 'Etranger'].includes(
+                    displayName
+                )
+        )
+    );
+
+    // Filtrer les autres types
+    const otherWineTypeMap = computed(() =>
+        wineTypeMap.value.filter(([displayName]) =>
+            ['Champagne', 'Pétillant', 'Divers', 'Etranger'].includes(
+                displayName
+            )
+        )
+    );
+
+    // Vérifier si une route enfant est active pour les régions
+    const isRegionalActive = computed(() =>
+        regionalWineTypeMap.value.some(
+            ([, routeName]) => route.path === '/type/' + routeName
+        )
+    );
+
+    // Vérifier si une route enfant est active pour les autres types
+    const isOtherActive = computed(() =>
+        otherWineTypeMap.value.some(
+            ([, routeName]) => route.path === '/type/' + routeName
+        )
     );
 </script>
 
 <style scoped>
     /* Navigation bar */
-    .navigation-bar {
+    nav ul.menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background-color: #3b3b3b; /* Couleur sombre élégante */
+        background-color: #2c2c2c;
         padding: 10px 20px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        border-bottom: 2px solid #ddd;
     }
 
-    /* Logo section */
-    .logo-container {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+    nav ul.menu li {
+        margin: 0 10px;
+        position: relative;
     }
 
-    .logo {
-        height: 40px;
-        width: auto;
-    }
-
-    .app-title {
-        color: #ffffff;
-        font-size: 20px;
-        font-weight: bold;
-        text-transform: uppercase;
-    }
-
-    /* Navigation links */
-    .nav-links {
-        display: flex;
-        list-style: none;
-        gap: 20px;
-        margin: 0;
-        padding: 0;
-    }
-
-    .nav-links li a {
+    nav ul.menu li a {
         text-decoration: none;
-        color: #ffffff;
+        color: #ddd;
         font-size: 16px;
-        transition: color 0.3s ease;
+        font-weight: bold;
+        padding: 5px 10px;
+        border-radius: 5px;
+        transition: all 0.3s ease;
     }
 
-    .nav-links li a:hover {
-        color: #e0b67a; /* Effet doré au survol */
+    nav ul.menu li a:hover {
+        background-color: #444;
+        color: white;
     }
 
-    .nav-links li a.router-link-active {
-        color: #e0b67a; /* Mettre en valeur la page active */
+    nav ul.menu li a.active,
+    nav ul.menu li.active > a.dropdown-trigger {
+        background-color: #8b0000;
+        color: white;
+        pointer-events: none;
+    }
+
+    /* Dropdown styles */
+    .menu > li.dropdown {
+        position: relative;
+    }
+
+    .menu > li.dropdown .dropdown-trigger {
+        cursor: pointer;
+    }
+
+    .menu > li.dropdown:hover ul {
+        display: block;
+    }
+
+    .menu > li.dropdown ul {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #2c2c2c;
+        border: 1px solid #444;
+        border-radius: 5px;
+        padding: 10px;
+        list-style: none;
+        margin: 0;
+        z-index: 10;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .menu > li.dropdown ul li {
+        margin: 5px 0;
+    }
+
+    .menu > li.dropdown ul li a {
+        display: block;
+        color: #ddd;
+        padding: 5px;
+        border-radius: 3px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+    }
+
+    .menu > li.dropdown ul li a:hover {
+        background-color: #444;
+        color: white;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+        nav ul.menu {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        nav ul.menu li {
+            margin: 5px 0;
+        }
+
+        nav ul.menu li a {
+            font-size: 14px;
+        }
     }
 </style>
