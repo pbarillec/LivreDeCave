@@ -57,6 +57,20 @@
                     Historique
                 </router-link>
             </li>
+
+            <!-- Engrenage avec menu déroulant -->
+            <li class="settings">
+                <!-- Icône d'engrenage -->
+                <div class="settings-icon">
+                    <img src="@/assets/images/cog.svg" alt="Paramètres" />
+                </div>
+
+                <!-- Menu déroulant -->
+                <ul>
+                    <li><a href="#" @click="handleImport">Import</a></li>
+                    <li><a href="#" @click="handleExport">Export</a></li>
+                </ul>
+            </li>
         </ul>
     </nav>
 </template>
@@ -105,7 +119,6 @@
         )
     );
 </script>
-
 <style scoped>
     /* Navigation bar */
     nav ul.menu {
@@ -190,6 +203,66 @@
     }
 
     .menu > li.dropdown ul li a:hover {
+        background-color: #444;
+        color: white;
+    }
+
+    /* Engrenage */
+    .menu .settings {
+        position: relative;
+        margin-left: auto; /* Place l'engrenage à droite */
+    }
+
+    .settings-icon img {
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        filter: invert(1) brightness(2); /* Rend l'icône blanche */
+        transition:
+            transform 0.3s ease,
+            filter 0.3s ease;
+    }
+
+    .settings-icon img:hover {
+        transform: rotate(15deg); /* Rotation au survol */
+        filter: invert(1) brightness(3); /* Accentue la luminosité au survol */
+    }
+
+    .menu .settings ul {
+        display: none;
+        position: absolute;
+        top: 30px;
+        right: 0;
+        background-color: #2c2c2c;
+        border: 1px solid #444;
+        border-radius: 5px;
+        padding: 10px;
+        list-style: none;
+        margin: 0;
+        z-index: 10;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        min-width: 150px;
+    }
+
+    .menu .settings:hover ul {
+        display: block;
+    }
+
+    .menu .settings ul li {
+        margin: 5px 0;
+    }
+
+    .menu .settings ul li a {
+        display: block;
+        color: #ddd;
+        padding: 8px 10px;
+        border-radius: 3px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+    }
+
+    .menu .settings ul li a:hover {
         background-color: #444;
         color: white;
     }
