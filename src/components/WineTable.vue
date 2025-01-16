@@ -63,28 +63,32 @@
                     </td>
                     <td
                         v-if="actions.length"
-                        class="border border-gray-300 px-4 py-2 text-center"
+                        class="border border-gray-300 px-4 py-2 text-center justify-center space-x-2"
                     >
                         <button
                             v-if="actions.includes('consume')"
                             @click="$emit('consume', wine)"
-                            class="bg-green-500 text-white px-2 py-1 rounded shadow"
+                            class="p-2 rounded shadow bg-gray-200 hover:bg-gray-300"
                         >
-                            Consommer
+                            <img
+                                src="@/assets/images/fill-wine-glass.svg"
+                                alt="Consommer"
+                                class="w-5 h-5"
+                            />
                         </button>
                         <button
                             v-if="actions.includes('edit')"
                             @click="$emit('edit', wine)"
-                            class="bg-blue-500 text-white px-2 py-1 rounded shadow"
+                            class="p-2 rounded shadow bg-gray-200 hover:bg-gray-300"
                         >
-                            Modifier
+                            <PencilIcon class="h-5 w-5 text-black" />
                         </button>
                         <button
                             v-if="actions.includes('delete')"
                             @click="$emit('delete', wine)"
-                            class="bg-red-500 text-white px-2 py-1 rounded shadow"
+                            class="p-2 rounded shadow bg-gray-200 hover:bg-gray-300"
                         >
-                            Supprimer
+                            <TrashIcon class="h-5 w-5 text-black" />
                         </button>
                     </td>
                 </tr>
@@ -95,6 +99,7 @@
 <script setup lang="ts">
     import { Wine } from '../models/Wine';
     import { PropType } from 'vue';
+    import { PencilIcon, TrashIcon } from '@heroicons/vue/24/outline';
 
     const props = defineProps({
         wines: {
@@ -143,3 +148,8 @@
         return total;
     }
 </script>
+<style scoped>
+    table {
+        border-collapse: collapse;
+    }
+</style>
