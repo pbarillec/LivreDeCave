@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="wine-type-page">
         <div class="bg-paper text-ink min-h-screen p-4">
             <h1 class="text-4xl font-serif">
                 Vins de {{ wineTypeDisplayName }}
@@ -11,11 +11,19 @@
             />
 
             <!-- Bouton pour ouvrir la modale d'ajout de vin -->
-            <button
+            <!-- <button
                 @click="openAddModal"
                 class="mt-4 px-4 py-2 bg-green-500 text-white rounded"
             >
                 Ajouter un vin
+            </button> -->
+
+            <button
+                @click="openAddModal"
+                class="p-2 rounded shadow bg-gray-200 hover:bg-gray-300"
+                title="Ajouter un vin"
+            >
+                <PlusIcon class="w-5 h-5 text-black" />
             </button>
 
             <!-- Conteneur du tableau avec scroll -->
@@ -65,6 +73,7 @@
     import AddWineModal from './AddWineModal.vue';
     import EditWineModal from './EditWineModal.vue';
     import DrinkWineModal from './DrinkWineModal.vue';
+    import { PlusIcon } from '@heroicons/vue/24/solid';
 
     // Charger le store
     const wineStore = useWineStore();
