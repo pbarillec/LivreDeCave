@@ -1,10 +1,4 @@
 <template>
-    <!-- <button
-        @click="toggleFilters"
-        class="bg-blue-500 text-white px-4 py-2 rounded shadow"
-    >
-        {{ showFilters ? 'Fermer' : 'Filtrer / Trier' }}
-    </button> -->
     <div class="sort-and-filter">
         <slot name="filter-button">
             <button

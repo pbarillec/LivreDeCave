@@ -275,9 +275,9 @@
 </template>
 <script setup lang="ts">
     import { VueFinalModal } from 'vue-final-modal';
-    import { PropType, ref, computed } from 'vue';
+    import { PropType, computed } from 'vue';
     import { Wine } from '../models/Wine';
-    import { useForm, Field, Form, ErrorMessage } from 'vee-validate';
+    import { useForm, Field } from 'vee-validate';
     import * as yup from 'yup';
 
     const props = defineProps({
