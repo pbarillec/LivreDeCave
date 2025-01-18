@@ -1,11 +1,10 @@
 <template>
-    <div>
+    <div class="history-page">
         <div class="bg-paper text-ink min-h-screen p-4">
             <h1 class="text-4xl font-serif">Historique des vins consommés</h1>
 
             <!-- Composant de tri et filtre -->
             <SortAndFilterComponent
-                :data="wines"
                 @update-data="updateFilteredAndSortedWines"
             />
 
@@ -14,25 +13,46 @@
                 :wines="filteredAndSortedWines"
                 :columns="columnsToDisplay"
                 :actions="availableActions"
-                @edit="handleEdit"
-                @delete="handleDelete"
+                @edit="openEditModal"
+            />
+
+            <EditHistoryWineModal
+                v-model="isEditHistoryModalVisible"
+                :selectedWine="selectedWine || ({} as Wine)"
+                :on-edit-drunk-wine="handleEditDrunkWine"
             />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-    import { ref, computed, onMounted } from 'vue';
+    import { ref, computed, onMounted, watch } from 'vue';
     import { Wine } from '../models/Wine';
     import SortAndFilterComponent from './SortAndFilterComponent.vue';
     import WineTable from './WineTable.vue';
     import { useWineStore } from '../stores/wineStore';
+    import EditHistoryWineModal from './EditHistoryWineModal.vue';
 
     const wineStore = useWineStore();
     const wines = computed(() => wineStore.wines);
+    const selectedWine = ref<Wine | null>(null);
 
     // Données triées et filtrées
     const filteredAndSortedWines = ref<Wine[]>([...wines.value]);
+
+    // Watch sur les vins du store pour avoir une mise à jour en temps réel
+    watch(
+        () => wineStore.wines,
+        () => {
+            updateFilteredAndSortedWines({
+                sortColumn: 'id',
+                sortOrder: 'desc',
+                filterColor: '',
+                filterVintage: null,
+            });
+        },
+        { deep: true }
+    );
 
     // Appeler la fonction lors du montage du composant
     onMounted(() => {
@@ -60,7 +80,7 @@
     ];
 
     // Actions disponible
-    const availableActions = ['edit', 'delete'];
+    const availableActions = ['edit'];
 
     // Fonction pour mettre à jour les données en fonction du tri et des filtres
     const updateFilteredAndSortedWines = ({
@@ -100,13 +120,29 @@
         filteredAndSortedWines.value = result;
     };
 
-    function handleEdit(wine: Wine) {
-        console.log(wine);
-        // wineStore.edit(wine);
+    // Variables pour la modale d'édition
+    const isEditHistoryModalVisible = ref(false);
+
+    function openEditModal(wine: Wine) {
+        selectedWine.value = { ...wine };
+        isEditHistoryModalVisible.value = true;
     }
 
-    function handleDelete(wine: Wine) {
-        console.log(wine);
-        // wineStore.delete(wine);
+    function closeEditModal() {
+        isEditHistoryModalVisible.value = false;
+        selectedWine.value = null;
+    }
+
+    function handleEditDrunkWine(wine: Wine) {
+        wineStore.updateWine(wine);
+
+        updateFilteredAndSortedWines({
+            sortColumn: 'id',
+            sortOrder: 'desc',
+            filterColor: '',
+            filterVintage: null,
+        });
+
+        closeEditModal();
     }
 </script>

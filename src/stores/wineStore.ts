@@ -240,6 +240,8 @@ export const useWineStore = defineStore('wineStore', () => {
 
     async function updateWine(updatedWine: Wine) {
         try {
+            updatedWine.quantityLeft =
+                updatedWine.quantityBought - updatedWine.quantityDrunk;
             await invoke('update_wine', { wine: updatedWine });
             await loadWines();
         } catch (error) {

@@ -125,7 +125,7 @@
         }
     );
 
-    // Watch sur les vins du store pooour avoir une mise à jour en temps réel
+    // Watch sur les vins du store pour avoir une mise à jour en temps réel
     watch(
         () => wineStore.wines,
         () => {
