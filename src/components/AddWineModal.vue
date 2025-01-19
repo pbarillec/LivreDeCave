@@ -275,7 +275,7 @@
 </template>
 <script setup lang="ts">
     import { VueFinalModal } from 'vue-final-modal';
-    import { PropType, computed } from 'vue';
+    import { PropType, computed, watch } from 'vue';
     import { Wine } from '../models/Wine';
     import { useForm, Field } from 'vee-validate';
     import * as yup from 'yup';
@@ -312,24 +312,29 @@
         color: yup.string().required('La couleur est requise'),
         vintage: yup
             .number()
+            .typeError('Le millésime est requis') // Affiche un message "requis" si vide
             .required('Le millésime est requis')
             .min(1900, 'Millésime non valide')
             .max(new Date().getFullYear(), 'Millésime non valide'),
         purchaseDate: yup.string().required("La date d'achat est requise"),
         purchasePrice: yup
             .number()
+            .typeError("Le prix d'achat est requis")
             .required("Le prix d'achat est requis")
-            .min(1, 'Le prix doit être supérieur à 1'),
+            .min(0, 'Le prix doit être positif'),
         bottleSize: yup
             .number()
+            .typeError('La contenance est requise')
             .required('La contenance est requise')
             .min(1, 'La contenance doit être supérieure à 1'),
         quantityBought: yup
             .number()
+            .typeError('La quantité achetée est requise')
             .required('La quantité achetée est requise')
             .min(1, 'La quantité doit être supérieure à 0'),
         peak: yup
             .number()
+            .typeError("L'apogée est requise")
             .required("L'apogée est requise")
             .min(new Date().getFullYear(), "L'apogée doit être dans le futur"),
     });
@@ -377,6 +382,26 @@
 
         resetForm(); // Réinitialise le formulaire après soumission
         closeModal();
+    });
+
+    // Réinitialiser les valeurs à l'ouverture de la modale
+    watch(isModalVisible, (newValue: boolean) => {
+        if (newValue) {
+            resetForm({
+                values: {
+                    name: '',
+                    appellation: '',
+                    producer: '',
+                    color: 'Rouge', // Valeur par défaut
+                    vintage: '',
+                    purchaseDate: new Date().toISOString().split('T')[0], // Date d'aujourd'hui
+                    purchasePrice: '',
+                    bottleSize: '',
+                    quantityBought: '',
+                    peak: '',
+                },
+            });
+        }
     });
 
     // Fermer la modale
