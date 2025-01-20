@@ -68,7 +68,9 @@
                 <!-- Menu déroulant -->
                 <ul>
                     <li><a href="#" @click="handleImport">Import</a></li>
-                    <li><a href="#" @click="handleExport">Export</a></li>
+                    <li>
+                        <a href="#" @click.prevent="handleExport">Export</a>
+                    </li>
                 </ul>
             </li>
         </ul>
@@ -79,6 +81,8 @@
     import { useWineStore } from '../stores/wineStore';
     import { computed, ref } from 'vue';
     import { useRoute } from 'vue-router';
+    import { invoke } from '@tauri-apps/api/core';
+    import { open, save } from '@tauri-apps/plugin-dialog';
 
     const wineStore = useWineStore();
     const wineTypeMap = computed(() =>
@@ -118,6 +122,35 @@
             ([, routeName]) => route.path === '/type/' + routeName
         )
     );
+
+    async function handleExport() {
+        console.log('Exporting wines...');
+        try {
+            // Ouvre la boîte de dialogue pour sélectionner l'emplacement du fichier
+            const filePath = await save({
+                title: 'Enregistrer les vins',
+                defaultPath: 'wines.json',
+                filters: [
+                    {
+                        name: 'JSON',
+                        extensions: ['json'],
+                    },
+                ],
+            });
+
+            if (filePath) {
+                console.log('Chemin du fichier sélectionné :', filePath);
+
+                // Appelle la commande Rust pour exporter les données des vins
+                await invoke('export_wines', { filePath });
+                console.log('Vins exportés avec succès !');
+            } else {
+                console.log('Aucun fichier sélectionné.');
+            }
+        } catch (error) {
+            console.error("Erreur lors de l'exportation des vins :", error);
+        }
+    }
 </script>
 <style scoped>
     /* Navigation bar */

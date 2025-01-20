@@ -11,6 +11,7 @@ fn greet(name: &str) -> String {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_dialog::init())
         .invoke_handler(tauri::generate_handler![
             greet,
             load_wines,
@@ -18,7 +19,8 @@ pub fn run() {
             add_wine,
             delete_wine,
             update_wine,
-            create_wine_file
+            create_wine_file,
+            export_wines
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -161,4 +163,20 @@ fn create_wine_file() -> Result<(), String> {
     let wines = Vec::<Wine>::new(); // Liste vide de vins
     let data = serde_json::to_string(&wines).map_err(|e| e.to_string())?;
     fs::write(file_path, data).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn export_wines(file_path: String) -> Result<(), String> {
+    // Charger les données des vins
+    let wines = load_wines().map_err(|e| format!("Erreur lors du chargement des vins : {}", e))?;
+
+    // Sérialiser les vins en JSON
+    let wines_json = serde_json::to_string_pretty(&wines)
+        .map_err(|e| format!("Erreur lors de la sérialisation des vins : {}", e))?;
+
+    // Écrire dans le fichier
+    std::fs::write(file_path, wines_json)
+        .map_err(|e| format!("Erreur lors de l'écriture du fichier : {}", e))?;
+
+    Ok(())
 }
