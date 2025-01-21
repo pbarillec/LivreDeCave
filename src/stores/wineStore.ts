@@ -268,6 +268,19 @@ export const useWineStore = defineStore('wineStore', () => {
         return maxId + 1; // Retourne l'ID suivant
     }
 
+    // Nouvelle méthode pour importer les vins
+    async function importWines(importedWines: Wine[]) {
+        try {
+            // Supprime les vins existants et remplace par ceux importés
+            wines.value = importedWines;
+
+            // Sauvegarde dans le backend
+            await invoke('save_wines', { wines: importedWines });
+        } catch (error) {
+            console.error("Erreur lors de l'importation des vins:", error);
+        }
+    }
+
     return {
         wines,
         addNewWine,
@@ -276,5 +289,6 @@ export const useWineStore = defineStore('wineStore', () => {
         getAllWineTypes,
         getWineTypeMap,
         loadWines,
+        importWines,
     };
 });

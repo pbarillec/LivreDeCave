@@ -10,8 +10,10 @@ fn greet(name: &str) -> String {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_fs::init())
         .invoke_handler(tauri::generate_handler![
             greet,
             load_wines,
@@ -20,7 +22,8 @@ pub fn run() {
             delete_wine,
             update_wine,
             create_wine_file,
-            export_wines
+            export_wines,
+            import_wines
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -179,4 +182,14 @@ fn export_wines(file_path: String) -> Result<(), String> {
         .map_err(|e| format!("Erreur lors de l'écriture du fichier : {}", e))?;
 
     Ok(())
+}
+
+#[tauri::command]
+fn import_wines(data: String) -> Result<(), String> {
+    // Parse le JSON
+    let wines: Vec<Wine> = serde_json::from_str(&data)
+        .map_err(|e| format!("Erreur lors du parsing du JSON : {}", e))?;
+
+    // Sauvegarde les vins importés
+    save_wines(wines)
 }

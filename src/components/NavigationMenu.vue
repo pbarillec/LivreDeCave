@@ -67,7 +67,9 @@
 
                 <!-- Menu déroulant -->
                 <ul>
-                    <li><a href="#" @click="handleImport">Import</a></li>
+                    <li>
+                        <a href="#" @click.prevent="handleImport">Import</a>
+                    </li>
                     <li>
                         <a href="#" @click.prevent="handleExport">Export</a>
                     </li>
@@ -83,6 +85,7 @@
     import { useRoute } from 'vue-router';
     import { invoke } from '@tauri-apps/api/core';
     import { open, save } from '@tauri-apps/plugin-dialog';
+    import { readTextFile } from '@tauri-apps/plugin-fs';
 
     const wineStore = useWineStore();
     const wineTypeMap = computed(() =>
@@ -149,6 +152,42 @@
             }
         } catch (error) {
             console.error("Erreur lors de l'exportation des vins :", error);
+        }
+    }
+
+    async function handleImport() {
+        try {
+            const filePath = await open({
+                title: 'Importer des vins',
+                filters: [{ name: 'JSON', extensions: ['json'] }],
+            });
+
+            if (!filePath) {
+                console.log('Aucun fichier sélectionné.');
+                return;
+            }
+
+            const fileContent = await readTextFile(filePath);
+            console.log('Contenu brut du fichier JSON :', fileContent);
+
+            const response = JSON.parse(fileContent);
+            console.log('Données parsées :', response);
+
+            if (!Array.isArray(response)) {
+                throw new Error(
+                    'Le fichier importé ne contient pas un tableau valide.'
+                );
+            }
+
+            await invoke('save_wines', { wines: response });
+            console.log('Données importées et sauvegardées.');
+
+            // Recharger les données dans le store
+            await wineStore.loadWines();
+            alert('Importation réussie.');
+        } catch (error) {
+            console.error("Erreur lors de l'importation des vins :", error);
+            alert("Échec de l'importation. Vérifiez le fichier.");
         }
     }
 </script>
