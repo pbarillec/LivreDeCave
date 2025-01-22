@@ -1,101 +1,61 @@
 <template>
     <div>
-        <!-- Total de chaque couleur de vin -->
-        <div class="mt-4">
-            <span class="font-bold">Total de chaque couleur de vin :</span>
-            <span class="ml-2">
-                Rouge ({{ computeNumberOfBottleByColor('Rouge') }}),
+        <!-- Titres des colonnes -->
+        <div class="table-header">
+            <span v-for="column in columns" :key="column" class="column-title">
+                {{ columnLabels[column] }}
             </span>
-            <span class="ml-2">
-                Blanc ({{ computeNumberOfBottleByColor('Blanc') }}),
-            </span>
-            <span class="ml-2">
-                Rosé ({{ computeNumberOfBottleByColor('Rosé') }})
+            <span v-if="actions.length" class="column-title text-center">
+                Actions
             </span>
         </div>
 
-        <!-- Tableau -->
-        <table
-            class="table-auto w-full border-collapse border border-gray-300 mt-4"
-        >
-            <thead>
-                <tr class="bg-gray-200">
-                    <th
-                        v-for="column in columns"
-                        :key="column"
-                        class="border border-gray-300 px-4 py-2"
-                    >
-                        {{ columnLabels[column] }}
-                    </th>
-                    <th
-                        v-if="actions.length"
-                        class="border border-gray-300 px-4 py-2 text-center"
-                    >
-                        Actions
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-if="wines.length === 0">
-                    <td
-                        :colspan="columns.length + (actions.length ? 1 : 0)"
-                        class="text-center text-gray-500 italic py-4"
-                    >
-                        Aucun vin disponible.
-                    </td>
-                </tr>
-                <tr
-                    v-else
-                    v-for="wine in wines"
-                    :key="wine.id"
-                    class="odd:bg-white even:bg-gray-100"
+        <!-- Ligne de chaque vin -->
+        <div v-if="wines.length === 0" class="no-wines">
+            Aucun vin disponible.
+        </div>
+        <div v-else v-for="wine in wines" :key="wine.id" class="wine-row">
+            <!-- Données du vin -->
+            <div v-for="column in columns" :key="column" class="wine-data">
+                {{
+                    column === 'purchaseDate'
+                        ? formatDate(String(wine[column as keyof Wine]))
+                        : wine[column as keyof Wine]
+                }}
+            </div>
+
+            <!-- Actions -->
+            <div v-if="actions.length" class="actions">
+                <button
+                    v-if="actions.includes('consume')"
+                    @click="$emit('consume', wine)"
+                    class="action-button"
                 >
-                    <td
-                        v-for="column in columns"
-                        :key="column"
-                        class="border border-gray-300 px-4 py-2"
-                    >
-                        {{
-                            column === 'purchaseDate'
-                                ? formatDate(String(wine[column as keyof Wine]))
-                                : wine[column as keyof Wine]
-                        }}
-                    </td>
-                    <td
-                        v-if="actions.length"
-                        class="border border-gray-300 px-4 py-2 text-center justify-center space-x-2"
-                    >
-                        <button
-                            v-if="actions.includes('consume')"
-                            @click="$emit('consume', wine)"
-                            class="p-2 rounded shadow bg-gray-200 hover:bg-gray-300"
-                        >
-                            <img
-                                src="@/assets/images/fill-wine-glass.svg"
-                                alt="Consommer"
-                                class="w-5 h-5"
-                            />
-                        </button>
-                        <button
-                            v-if="actions.includes('edit')"
-                            @click="$emit('edit', wine)"
-                            class="p-2 rounded shadow bg-gray-200 hover:bg-gray-300"
-                        >
-                            <PencilIcon class="h-5 w-5 text-black" />
-                        </button>
-                        <button
-                            v-if="actions.includes('delete')"
-                            @click="$emit('delete', wine)"
-                            class="p-2 rounded shadow bg-gray-200 hover:bg-gray-300"
-                        >
-                            <TrashIcon class="h-5 w-5 text-black" />
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                    <img
+                        src="@/assets/images/fill-wine-glass.svg"
+                        alt="Consommer"
+                        class="action-icon"
+                    />
+                </button>
+                <button
+                    v-if="actions.includes('edit')"
+                    @click="$emit('edit', wine)"
+                    class="action-button"
+                >
+                    <PencilIcon class="action-icon" />
+                </button>
+                <button
+                    v-if="actions.includes('delete')"
+                    @click="$emit('delete', wine)"
+                    class="action-button"
+                >
+                    <TrashIcon class="action-icon" />
+                </button>
+            </div>
+        </div>
     </div>
 </template>
+
 <script setup lang="ts">
     import { Wine } from '../models/Wine';
     import { PropType } from 'vue';
@@ -138,18 +98,73 @@
         const [year, month, day] = date.split('-');
         return `${day}-${month}-${year}`;
     }
-
-    function computeNumberOfBottleByColor(color: string) {
-        const winesFound = props.wines.filter((wine) => wine.color === color);
-        let total = 0;
-        for (const wine of winesFound) {
-            total += wine.quantityBought;
-        }
-        return total;
-    }
 </script>
 <style scoped>
-    table {
-        border-collapse: collapse;
+    /* Titres des colonnes */
+    .table-header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        font-size: 1em; /* Taille réduite pour correspondre à l'ancienne taille */
+        margin-bottom: 10px;
+        border-bottom: 2px solid #8b0000;
+        padding-bottom: 10px;
+    }
+
+    /* Colonnes des titres */
+    .column-title {
+        flex: 1;
+        text-align: center;
+        font-family: 'Georgia', serif;
+        font-size: 0.9em; /* Taille ajustée pour une meilleure lisibilité */
+    }
+
+    /* Chaque ligne de vin */
+    .wine-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: 'Cursive', serif;
+        padding: 15px 0;
+        border-bottom: 1px solid #8b0000;
+    }
+
+    /* Données du vin */
+    .wine-data {
+        flex: 1;
+        text-align: center;
+    }
+
+    /* Pas de vins disponibles */
+    .no-wines {
+        text-align: center;
+        font-style: italic;
+        color: #888;
+        margin-top: 20px;
+    }
+
+    /* Boutons d'action */
+    .actions {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .action-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .action-icon {
+        width: 24px;
+        height: 24px;
+        color: black;
+        transition: transform 0.3s ease;
+    }
+
+    .action-icon:hover {
+        transform: scale(1.2);
+        color: #8b0000;
     }
 </style>
