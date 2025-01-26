@@ -15,7 +15,13 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    # Étape 2 : Installer Rust et Node.js
+    # Étape 2 : Installer les dépendances système (Ajouté ici)
+    - name: Install System Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y pkg-config libglib2.0-dev
+
+    # Étape 3 : Installer Rust et Node.js
     - name: Setup Rust
       uses: actions-rs/toolchain@v1
       with:
@@ -27,11 +33,11 @@ jobs:
       with:
         node-version: '18'
 
-    # Étape 3 : Installer les dépendances
+    # Étape 4 : Installer les dépendances
     - name: Install Dependencies
       run: npm install
 
-    # Étape 4 : Construire l'application Tauri
+    # Étape 5 : Construire l'application Tauri
     - name: Build Tauri App
       run: npm run tauri build
 
