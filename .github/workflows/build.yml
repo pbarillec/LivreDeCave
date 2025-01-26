@@ -36,33 +36,32 @@ jobs:
             # Étape 5 : Construire l'application Tauri
             - name: Build Tauri App
               run: npm run tauri build
+    release:
+        runs-on: windows-latest
+        needs: build
+        if: github.event_name == 'push' && contains(github.ref, 'main')
 
-release:
-    runs-on: windows-latest
-    needs: build
-    if: github.event_name == 'push' && contains(github.ref, 'main')
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v3
 
-    steps:
-        - name: Checkout Repository
-          uses: actions/checkout@v3
+            - name: Create GitHub Release
+              uses: actions/create-release@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  tag_name: v1.1.0
+                  release_name: 'Version 1.1.0'
+                  body: 'Nouvelle version avec des corrections et des fonctionnalités supplémentaires.'
+                  draft: false
+                  prerelease: false
 
-        - name: Create GitHub Release
-          uses: actions/create-release@v1
-          env:
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-              tag_name: v1.1.0
-              release_name: 'Version 1.1.0'
-              body: 'Nouvelle version avec des corrections et des fonctionnalités supplémentaires.'
-              draft: false
-              prerelease: false
-
-        - name: Upload Release Asset
-          uses: actions/upload-release-asset@v1
-          env:
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-              upload_url: ${{ steps.create_release.outputs.upload_url }}
-              asset_path: src-tauri/target/release/bundle/
-              asset_name: LivreDeCave-v1.1.0-setup.exe
-              asset_content_type: application/x-msdownload
+            - name: Upload Release Asset
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ steps.create_release.outputs.upload_url }}
+                  asset_path: src-tauri/target/release/bundle/
+                  asset_name: LivreDeCave-v1.1.0-setup.exe
+                  asset_content_type: application/x-msdownload
