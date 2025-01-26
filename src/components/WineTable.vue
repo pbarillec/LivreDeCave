@@ -61,7 +61,7 @@
     import { PropType } from 'vue';
     import { PencilIcon, TrashIcon } from '@heroicons/vue/24/outline';
 
-    const props = defineProps({
+    defineProps({
         wines: {
             type: Array as PropType<Wine[]>,
             required: true,
