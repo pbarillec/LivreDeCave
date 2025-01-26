@@ -36,30 +36,12 @@ jobs:
             # Étape 5 : Construire l'application Tauri
             - name: Build Tauri App
               run: npm run tauri build
-    release:
-        runs-on: windows-latest
-        needs: build
-        if: github.event_name == 'push' && contains(github.ref, 'main')
-        permissions:
-            contents: write
-        steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v3
 
-            - name: Create GitHub Release
-              id: release
-              uses: actions/create-release@v1
+           # Étape 6 : Upload des artefacts
+            - name: Upload Artifacts
+              uses: actions/upload-artifact@v3
               with:
-                  tag_name: v1.1.0
-                  release_name: 'Version 1.1.0'
-                  body: 'Nouvelle version avec des corrections et des fonctionnalités supplémentaires.'
-                  draft: false
-                  prerelease: false
-
-            - name: Upload Release Asset
-              uses: actions/upload-release-asset@v1
-              with:
-                  upload_url: ${{ steps.release.outputs.upload_url }}
-                  asset_path: src-tauri/target/release/bundle/nsis
-                  asset_name: LivreDeCave-v1.1.0_x64-setup.exe
-                  asset_content_type: application/x-msdownload
+                  name: Tauri-Build
+                  path: |
+                    src-tauri/target/release/bundle/msi/*.msi
+                    src-tauri/target/release/bundle/nsis/*.exe
