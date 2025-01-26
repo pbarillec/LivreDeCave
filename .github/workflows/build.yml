@@ -50,7 +50,6 @@ jobs:
               id: release
               uses: actions/create-release@v1
               with:
-                  token: ${{ secrets.GITHUB_TOKEN }}
                   tag_name: v1.1.0
                   release_name: 'Version 1.1.0'
                   body: 'Nouvelle version avec des corrections et des fonctionnalités supplémentaires.'
@@ -61,6 +60,6 @@ jobs:
               uses: actions/upload-release-asset@v1
               with:
                   upload_url: ${{ steps.release.outputs.upload_url }}
-                  asset_path: src-tauri/target/release/bundle/
-                  asset_name: LivreDeCave-v1.1.0-setup.exe
+                  asset_path: src-tauri/target/release/bundle/nsis
+                  asset_name: LivreDeCave-v1.1.0_x64-setup.exe
                   asset_content_type: application/x-msdownload
