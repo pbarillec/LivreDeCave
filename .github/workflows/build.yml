@@ -1,53 +1,68 @@
 name: Build and Release Tauri App
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
+    push:
+        branches:
+            - main
+    pull_request:
 
 jobs:
-  build:
-    runs-on: windows-latest
+    build:
+        runs-on: windows-latest
 
-    steps:
-    # Étape 1 : Cloner le dépôt
-    - name: Checkout Repository
-      uses: actions/checkout@v3
+        steps:
+            # Étape 1 : Cloner le dépôt
+            - name: Checkout Repository
+              uses: actions/checkout@v3
 
-    # Étape 2 : Installer Rust
-    - name: Setup Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        profile: minimal
-        toolchain: stable
-        override: true
+            # Étape 2 : Installer Rust
+            - name: Setup Rust
+              uses: actions-rs/toolchain@v1
+              with:
+                  profile: minimal
+                  toolchain: stable
+                  override: true
 
-    # Étape 3 : Installer Node.js
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
+            # Étape 3 : Installer Node.js
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: '18'
 
-    # Étape 4 : Installer les dépendances du projet
-    - name: Install Dependencies
-      run: npm install
+            # Étape 4 : Installer les dépendances du projet
+            - name: Install Dependencies
+              run: npm install
 
-    # Étape 5 : Construire l'application Tauri
-    - name: Build Tauri App
-      run: npm run tauri build
+            # Étape 5 : Construire l'application Tauri
+            - name: Build Tauri App
+              run: npm run tauri build
 
-  release:
+release:
     runs-on: windows-latest
     needs: build
     if: github.event_name == 'push' && contains(github.ref, 'main')
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
+        - name: Checkout Repository
+          uses: actions/checkout@v3
 
-    - name: Upload Release Asset
-      uses: actions/upload-artifact@v3
-      with:
-        name: Tauri Build
-        path: src-tauri/target/release/bundle/
+        - name: Create GitHub Release
+          uses: actions/create-release@v1
+          env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+              tag_name: v1.1.0
+              release_name: 'Version 1.1.0'
+              body: 'Nouvelle version avec des corrections et des fonctionnalités supplémentaires.'
+              draft: false
+              prerelease: false
+
+        - name: Upload Release Asset
+          uses: actions/upload-release-asset@v1
+          env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+              upload_url: ${{ steps.create_release.outputs.upload_url }}
+              asset_path: src-tauri/target/release/bundle/
+              asset_name: LivreDeCave-v1.1.0-setup.exe
+              asset_content_type: application/x-msdownload
