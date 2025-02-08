@@ -94,8 +94,7 @@
                         >Prix d'achat :</label
                     >
                     <input
-                        type="number"
-                        step="0.01"
+                        type="test"
                         v-model="editableWine.purchasePrice"
                         class="w-full border-gray-300 rounded px-3 py-2"
                         placeholder="Ex : 25.50"

@@ -165,21 +165,18 @@
                     >
                     <Field
                         name="purchasePrice"
-                        rules="required|numeric|min_value:0"
+                        rules="required"
                         v-slot="{ field, errors }"
                     >
                         <input
                             v-bind="field"
-                            type="number"
-                            step="0.01"
+                            type="text"
                             class="w-full border-gray-300 rounded px-3 py-2"
                             placeholder="Ex : 25.50"
                         />
-                        <span
-                            v-if="errors.length"
-                            class="text-red-500 text-sm"
-                            >{{ errors[0] }}</span
-                        >
+                        <span v-if="errors.length" class="text-red-500 text-sm">
+                            {{ errors[0] }}
+                        </span>
                     </Field>
                 </div>
                 <div>
