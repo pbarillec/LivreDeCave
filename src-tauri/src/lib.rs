@@ -38,7 +38,7 @@ struct Wine {
     appellation: String,
     producer: String,
     color: String,
-    vintage: u16,
+    vintage: Option<u16>,
     purchase_date: String,
     purchase_price: f32,
     bottle_size: u16,
@@ -47,7 +47,7 @@ struct Wine {
     quantity_drunk: u16,
     notes: String,
     wine_type: String,
-    peak: u16,
+    peak: Option<u16>,
 }
 
 fn get_wine_file_path() -> PathBuf {

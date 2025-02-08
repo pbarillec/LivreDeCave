@@ -1,5 +1,5 @@
 <template>
-    <nav v-click-outside="closeAllDropdowns">
+    <nav>
         <ul class="menu">
             <!-- Lien vers la page d'accueil -->
             <li>

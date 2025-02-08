@@ -161,7 +161,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <div>
                     <label class="block text-gray-700 font-medium mb-1"
-                        >Prix d'achat :</label
+                        >Prix d'achat (€) :</label
                     >
                     <Field
                         name="purchasePrice"
@@ -312,8 +312,10 @@
         color: yup.string().required('La couleur est requise'),
         vintage: yup
             .number()
-            .typeError('Le millésime est requis') // Affiche un message "requis" si vide
-            .required('Le millésime est requis')
+            .nullable()
+            .transform((value, originalValue) =>
+                originalValue === '' ? null : value
+            )
             .min(1900, 'Millésime non valide')
             .max(new Date().getFullYear(), 'Millésime non valide'),
         purchaseDate: yup.string().required("La date d'achat est requise"),
@@ -334,8 +336,10 @@
             .min(1, 'La quantité doit être supérieure à 0'),
         peak: yup
             .number()
-            .typeError("L'apogée est requise")
-            .required("L'apogée est requise")
+            .nullable()
+            .transform((value, originalValue) =>
+                originalValue === '' ? null : value
+            )
             .min(new Date().getFullYear(), "L'apogée doit être dans le futur"),
     });
 
@@ -364,13 +368,13 @@
             values.appellation,
             values.producer,
             values.color,
-            parseInt(values.vintage, 10),
+            values.vintage ? parseInt(values.vintage, 10) : null,
             values.purchaseDate,
             parseFloat(values.purchasePrice),
             parseInt(values.bottleSize, 10),
             parseInt(values.quantityBought, 10),
             0, // quantityLeft
-            parseInt(values.peak, 10),
+            values.peak ? parseInt(values.peak, 10) : null,
             '', // notes
             props.wineTypeUrl ?? '', // wineType
             0 // quantityDrunk

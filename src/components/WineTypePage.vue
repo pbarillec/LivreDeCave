@@ -237,7 +237,6 @@
         if (!wine.name.trim()) errors.push('Le nom du vin est requis.');
         if (!wine.appellation.trim()) errors.push("L'appellation est requise.");
         if (!wine.producer.trim()) errors.push('Le producteur est requis.');
-        if (!wine.vintage) errors.push('Le millésime est requis.');
         if (!wine.purchaseDate.trim())
             errors.push("La date d'achat est requise.");
         if (wine.purchasePrice <= 0)

@@ -50,9 +50,9 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
-                  tag_name: v1.1.0
-                  release_name: 'Version 1.1.0'
-                  body: 'Nouvelle version avec des corrections et des fonctionnalités supplémentaires.'
+                  tag_name: v1.1.1
+                  release_name: 'Version 1.1.1'
+                  body: 'Nouvelle version avec des corrections.'
                   draft: false
                   prerelease: false
 
