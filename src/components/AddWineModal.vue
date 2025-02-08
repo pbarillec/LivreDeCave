@@ -319,11 +319,7 @@
             .min(1900, 'Millésime non valide')
             .max(new Date().getFullYear(), 'Millésime non valide'),
         purchaseDate: yup.string().required("La date d'achat est requise"),
-        purchasePrice: yup
-            .number()
-            .typeError("Le prix d'achat est requis")
-            .required("Le prix d'achat est requis")
-            .min(0, 'Le prix doit être positif'),
+        purchasePrice: yup.string().required("Le prix d'achat est requis"),
         bottleSize: yup
             .number()
             .typeError('La contenance est requise')
@@ -370,7 +366,7 @@
             values.color,
             values.vintage ? parseInt(values.vintage, 10) : null,
             values.purchaseDate,
-            parseFloat(values.purchasePrice),
+            values.purchasePrice,
             parseInt(values.bottleSize, 10),
             parseInt(values.quantityBought, 10),
             0, // quantityLeft

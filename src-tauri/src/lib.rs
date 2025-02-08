@@ -40,7 +40,7 @@ struct Wine {
     color: String,
     vintage: Option<u16>,
     purchase_date: String,
-    purchase_price: f32,
+    purchase_price: Option<String>,
     bottle_size: u16,
     quantity_bought: u16,
     quantity_left: u16,

@@ -239,8 +239,6 @@
         if (!wine.producer.trim()) errors.push('Le producteur est requis.');
         if (!wine.purchaseDate.trim())
             errors.push("La date d'achat est requise.");
-        if (wine.purchasePrice <= 0)
-            errors.push("Le prix d'achat doit être supérieur à zéro.");
 
         addWineErrors.value = errors;
         return errors.length === 0;

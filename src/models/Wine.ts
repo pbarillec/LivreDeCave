@@ -7,7 +7,7 @@ export class Wine {
         public color: string,
         public vintage: number | null,
         public purchaseDate: string,
-        public purchasePrice: number,
+        public purchasePrice: string,
         public bottleSize: number,
         public quantityBought: number,
         public quantityLeft: number,
