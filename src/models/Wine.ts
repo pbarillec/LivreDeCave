@@ -14,7 +14,8 @@ export class Wine {
         public peak: number | null,
         public notes: string,
         public wineType: string,
-        public quantityDrunk: number
+        public quantityDrunk: number,
+        public infos: string | null
     ) {}
 
     // isInStock(): boolean {

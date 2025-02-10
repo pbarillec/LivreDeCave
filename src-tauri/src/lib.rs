@@ -48,6 +48,7 @@ struct Wine {
     notes: String,
     wine_type: String,
     peak: Option<u16>,
+    infos: Option<String>,
 }
 
 fn get_wine_file_path() -> PathBuf {
@@ -70,18 +71,42 @@ fn get_wine_file_path() -> PathBuf {
 }
 
 // Commande pour charger les vins
+// #[tauri::command]
+// fn load_wines() -> Result<Vec<Wine>, String> {
+//     let file_path = get_wine_file_path();
+//     if !fs::metadata(&file_path).is_ok() {
+//         create_wine_file()
+//             .map_err(|e| format!("Erreur lors de la création du fichier JSON : {}", e))?;
+//     }
+
+//     let data = fs::read_to_string(file_path)
+//         .map_err(|e| format!("Erreur de lecture du fichier : {}", e))?;
+//     let wines: Vec<Wine> =
+//         serde_json::from_str(&data).map_err(|e| format!("Erreur de parsing JSON : {}", e))?;
+//     Ok(wines)
+// }
+
 #[tauri::command]
 fn load_wines() -> Result<Vec<Wine>, String> {
     let file_path = get_wine_file_path();
     if !fs::metadata(&file_path).is_ok() {
         create_wine_file()
-            .map_err(|e| format!("Erreur lors de la création du fichier JSON : {}", e))?;
+            .map_err(|e| format!("Erreur lors de la création du fichier JSON : {}", e))?;
     }
 
-    let data = fs::read_to_string(file_path)
-        .map_err(|e| format!("Erreur de lecture du fichier : {}", e))?;
-    let wines: Vec<Wine> =
-        serde_json::from_str(&data).map_err(|e| format!("Erreur de parsing JSON : {}", e))?;
+    let data = fs::read_to_string(&file_path)
+        .map_err(|e| format!("Erreur de lecture du fichier : {}", e))?;
+
+    let mut wines: Vec<Wine> =
+        serde_json::from_str(&data).map_err(|e| format!("Erreur de parsing JSON : {}", e))?;
+
+    // 🚀 **Mise à jour automatique des anciennes entrées**
+    for wine in &mut wines {
+        if wine.infos.is_none() {
+            wine.infos = Some(String::new()); // Valeur par défaut : chaîne vide
+        }
+    }
+
     Ok(wines)
 }
 

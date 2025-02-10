@@ -251,6 +251,23 @@
                 </div>
             </div>
 
+            <!-- Ligne 6 -->
+            <div class="grid grid-cols-1 gap-4 mb-4">
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1"
+                        >Infos supplémentaire :</label
+                    >
+                    <Field name="infos" v-slot="{ field }">
+                        <input
+                            v-bind="field"
+                            type="text"
+                            class="w-full border-gray-300 rounded px-3 py-2"
+                            placeholder="Ex : Moelleux & fruité"
+                        />
+                    </Field>
+                </div>
+            </div>
+
             <!-- Boutons -->
             <div class="flex justify-end gap-4 mt-6">
                 <button
@@ -276,6 +293,7 @@
     import { Wine } from '../models/Wine';
     import { useForm, Field } from 'vee-validate';
     import * as yup from 'yup';
+    import { info } from 'console';
 
     const props = defineProps({
         modelValue: {
@@ -350,6 +368,7 @@
             bottleSize: '',
             quantityBought: '',
             peak: '',
+            infos: '',
         },
     });
 
@@ -370,7 +389,8 @@
             values.peak ? parseInt(values.peak, 10) : null,
             '', // notes
             props.wineTypeUrl ?? '', // wineType
-            0 // quantityDrunk
+            0, // quantityDrunk,
+            values.infos
         );
 
         if (props.onAddWine) {
@@ -396,6 +416,7 @@
                     bottleSize: '',
                     quantityBought: '',
                     peak: '',
+                    infos: '',
                 },
             });
         }

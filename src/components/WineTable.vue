@@ -17,11 +17,27 @@
         <div v-else v-for="wine in wines" :key="wine.id" class="wine-row">
             <!-- Données du vin -->
             <div v-for="column in columns" :key="column" class="wine-data">
-                {{
-                    column === 'purchaseDate'
-                        ? formatDate(String(wine[column as keyof Wine]))
-                        : wine[column as keyof Wine]
-                }}
+                <span
+                    v-if="column === 'name'"
+                    class="flex items-center justify-center gap-2"
+                >
+                    {{ wine[column as keyof Wine] }}
+                    <span v-if="wine.infos" class="info-icon group relative">
+                        ℹ️
+                        <span
+                            class="tooltip opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                            {{ wine.infos }}
+                        </span>
+                    </span>
+                </span>
+                <span v-else>
+                    {{
+                        column === 'purchaseDate'
+                            ? formatDate(String(wine[column as keyof Wine]))
+                            : wine[column as keyof Wine]
+                    }}
+                </span>
             </div>
 
             <!-- Actions -->
@@ -91,6 +107,7 @@
         quantityDrunk: 'Quantité Bue',
         peak: 'Apogée',
         notes: 'Commentaires',
+        infos: 'Infos',
     };
 
     function formatDate(date: string): string {
@@ -166,5 +183,34 @@
     .action-icon:hover {
         transform: scale(1.2);
         color: #8b0000;
+    }
+
+    /* Icône ℹ️ et tooltip */
+
+    .info-icon {
+        cursor: pointer;
+        font-size: 16px;
+        color: #007bff;
+        position: relative;
+    }
+
+    .tooltip {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #333;
+        color: white;
+        font-size: 12px;
+        padding: 5px;
+        border-radius: 4px;
+        white-space: nowrap;
+        z-index: 10;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .group:hover .tooltip {
+        opacity: 1;
     }
 </style>
