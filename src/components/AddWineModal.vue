@@ -293,7 +293,6 @@
     import { Wine } from '../models/Wine';
     import { useForm, Field } from 'vee-validate';
     import * as yup from 'yup';
-    import { info } from 'console';
 
     const props = defineProps({
         modelValue: {
