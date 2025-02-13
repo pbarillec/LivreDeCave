@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="wine-table-container">
         <!-- Titres des colonnes -->
         <div class="table-header">
             <span v-for="column in columns" :key="column" class="column-title">
@@ -10,63 +10,69 @@
             </span>
         </div>
 
-        <!-- Ligne de chaque vin -->
-        <div v-if="wines.length === 0" class="no-wines">
-            Aucun vin disponible.
-        </div>
-        <div v-else v-for="wine in wines" :key="wine.id" class="wine-row">
-            <!-- Données du vin -->
-            <div v-for="column in columns" :key="column" class="wine-data">
-                <span
-                    v-if="column === 'name'"
-                    class="flex items-center justify-center gap-2"
-                >
-                    {{ wine[column as keyof Wine] }}
-                    <span v-if="wine.infos" class="info-icon group relative">
-                        ℹ️
+        <!-- Conteneur avec SCROLL SEULEMENT SUR LE TABLEAU -->
+        <div class="table-scrollable">
+            <!-- Ligne de chaque vin -->
+            <div v-if="wines.length === 0" class="no-wines">
+                Aucun vin disponible.
+            </div>
+            <div v-else v-for="wine in wines" :key="wine.id" class="wine-row">
+                <!-- Données du vin -->
+                <div v-for="column in columns" :key="column" class="wine-data">
+                    <span
+                        v-if="column === 'name'"
+                        class="flex items-center justify-center gap-2"
+                    >
+                        {{ wine[column as keyof Wine] }}
                         <span
-                            class="tooltip opacity-0 group-hover:opacity-100 transition-opacity"
+                            v-if="wine.infos"
+                            class="info-icon group relative"
                         >
-                            {{ wine.infos }}
+                            ℹ️
+                            <span
+                                class="tooltip opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                                {{ wine.infos }}
+                            </span>
                         </span>
                     </span>
-                </span>
-                <span v-else>
-                    {{
-                        column === 'purchaseDate'
-                            ? formatDate(String(wine[column as keyof Wine]))
-                            : wine[column as keyof Wine]
-                    }}
-                </span>
-            </div>
+                    <span v-else>
+                        {{
+                            column === 'purchaseDate'
+                                ? formatDate(String(wine[column as keyof Wine]))
+                                : wine[column as keyof Wine]
+                        }}
+                    </span>
+                </div>
 
-            <!-- Actions -->
-            <div v-if="actions.length" class="actions">
-                <button
-                    v-if="actions.includes('consume')"
-                    @click="$emit('consume', wine)"
-                    class="action-button"
-                >
-                    <img
-                        src="@/assets/images/fill-wine-glass.svg"
-                        alt="Consommer"
-                        class="action-icon"
-                    />
-                </button>
-                <button
-                    v-if="actions.includes('edit')"
-                    @click="$emit('edit', wine)"
-                    class="action-button"
-                >
-                    <PencilIcon class="action-icon" />
-                </button>
-                <button
-                    v-if="actions.includes('delete')"
-                    @click="$emit('delete', wine)"
-                    class="action-button"
-                >
-                    <TrashIcon class="action-icon" />
-                </button>
+                <!-- Actions -->
+                <div v-if="actions.length" class="actions">
+                    <button
+                        v-if="actions.includes('consume')"
+                        @click="$emit('consume', wine)"
+                        class="action-button"
+                    >
+                        <img
+                            src="@/assets/images/fill-wine-glass.svg"
+                            alt="Consommer"
+                            class="action-icon"
+                        />
+                    </button>
+                    <button
+                        v-if="actions.includes('edit')"
+                        @click="$emit('edit', wine)"
+                        class="action-button"
+                    >
+                        <PencilIcon class="action-icon" />
+                    </button>
+                    <button
+                        v-if="actions.includes('delete')"
+                        @click="$emit('delete', wine)"
+                        class="action-button"
+                    >
+                        <TrashIcon class="action-icon" />
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -117,39 +123,51 @@
     }
 </script>
 <style scoped>
-    /* Titres des colonnes */
-    .table-header {
+    /* Conteneur du tableau avec scroll */
+    .wine-table-container {
         display: flex;
-        justify-content: space-between;
-        font-weight: bold;
-        font-size: 1em; /* Taille réduite pour correspondre à l'ancienne taille */
-        margin-bottom: 10px;
-        border-bottom: 2px solid #8b0000;
-        padding-bottom: 10px;
+        flex-direction: column;
+        max-height: calc(100vh - 220px); /* Ajuste selon le besoin */
     }
 
-    /* Colonnes des titres */
-    .column-title {
-        flex: 1;
+    /* Titres des colonnes */
+    .table-header {
+        display: grid;
+        grid-template-columns: repeat(
+            auto-fit,
+            minmax(100px, 1fr)
+        ); /* Aligne avec les données */
+        font-weight: bold;
+        font-size: 1em;
+        border-bottom: 2px solid #8b0000;
+        padding: 10px 0;
+        background-color: #fff5e1; /* Fond légèrement teinté */
+        position: sticky;
+        top: 0;
+        z-index: 2;
         text-align: center;
-        font-family: 'Georgia', serif;
-        font-size: 0.9em; /* Taille ajustée pour une meilleure lisibilité */
     }
 
     /* Chaque ligne de vin */
     .wine-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        display: grid;
+        grid-template-columns: repeat(
+            auto-fit,
+            minmax(100px, 1fr)
+        ); /* Même structure que le header */
         font-family: 'Cursive', serif;
         padding: 15px 0;
         border-bottom: 1px solid #8b0000;
+        text-align: center;
     }
 
     /* Données du vin */
     .wine-data {
         flex: 1;
         text-align: center;
+        white-space: normal; /* Permet le retour à la ligne */
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     /* Pas de vins disponibles */
