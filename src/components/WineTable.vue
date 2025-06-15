@@ -106,7 +106,7 @@
         color: 'Couleur',
         vintage: 'Millésime',
         purchaseDate: "Date d'achat",
-        purchasePrice: "Prix d'achat",
+        purchasePrice: 'Prix unitaire (€)',
         bottleSize: 'Contenance (cl)',
         quantityBought: 'Quantité achetée',
         quantityLeft: 'Quantité Restante',

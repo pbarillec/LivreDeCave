@@ -91,7 +91,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <div>
                     <label class="block text-gray-700 font-medium mb-1"
-                        >Prix d'achat :</label
+                        >Prix unitaire (€) :</label
                     >
                     <input
                         type="test"

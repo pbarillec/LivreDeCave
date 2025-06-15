@@ -22,7 +22,7 @@
                 >
                     <option value="name">Nom</option>
                     <option value="vintage">Millésime</option>
-                    <option value="purchasePrice">Prix d'achat</option>
+                    <option value="purchasePrice">Prix unitaire</option>
                     <option value="quantityLeft">Quantité Restante</option>
                 </select>
             </label>
