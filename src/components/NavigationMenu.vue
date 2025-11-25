@@ -73,10 +73,16 @@
                     <li>
                         <a href="#" @click.prevent="handleExport">Export</a>
                     </li>
+                    <li>
+                        <a href="#" @click.prevent="showLogModal = true"
+                            >Logs</a
+                        >
+                    </li>
                 </ul>
             </li>
         </ul>
     </nav>
+    <ActionLogModal v-if="showLogModal" @close="showLogModal = false" />
 </template>
 
 <script setup>
@@ -86,12 +92,14 @@
     import { invoke } from '@tauri-apps/api/core';
     import { open, save } from '@tauri-apps/plugin-dialog';
     import { readTextFile } from '@tauri-apps/plugin-fs';
+    import ActionLogModal from '@/components/ActionLogModal.vue';
 
     const wineStore = useWineStore();
     const wineTypeMap = computed(() =>
         Array.from(wineStore.getWineTypeMap().entries())
     );
     const route = useRoute();
+    const showLogModal = ref(false);
 
     // Filtrer les régions
     const regionalWineTypeMap = computed(() =>

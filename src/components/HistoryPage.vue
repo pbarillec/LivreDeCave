@@ -134,7 +134,7 @@
     }
 
     function handleEditDrunkWine(wine: Wine) {
-        wineStore.updateWine(wine);
+        wineStore.editWine(wine);
 
         updateFilteredAndSortedWines({
             sortColumn: 'id',

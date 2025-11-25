@@ -214,7 +214,7 @@
         selectedWine.value.quantityDrunk += quantityToConsume;
         selectedWine.value.notes = comment;
 
-        wineStore.updateWine(selectedWine.value);
+        wineStore.consumeWine(selectedWine.value);
         closeConsumeModal();
     }
 
@@ -274,7 +274,7 @@
     }
 
     function handleEditWine(wine: Wine) {
-        wineStore.updateWine(wine);
+        wineStore.editWine(wine);
 
         updateFilteredAndSortedWines({
             sortColumn: 'id',
