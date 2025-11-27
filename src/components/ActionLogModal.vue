@@ -3,9 +3,14 @@
         <div class="modal-content">
             <ActionLog />
             <div class="modal-actions">
-                <button class="btn" @click="actionLogStore.clearLogs()">
-                    Vider le journal
+                <button
+                    class="btn"
+                    @click="handleUndo"
+                    :disabled="!actionLogStore.undoStack.length"
+                >
+                    ↶ Retour arrière
                 </button>
+
                 <button class="btn btn-close" @click="close">Fermer</button>
             </div>
         </div>
@@ -15,10 +20,17 @@
 <script setup lang="ts">
     import ActionLog from './ActionLog.vue';
     import { useActionLogStore } from '../stores/useActionLogStore';
+    import { useWineStore } from '../stores/wineStore';
 
+    const wineStore = useWineStore();
     const actionLogStore = useActionLogStore();
     const emit = defineEmits(['close']);
     const close = () => emit('close');
+
+    function handleUndo() {
+        wineStore.undo();
+        actionLogStore.removeLastLog();
+    }
 </script>
 
 <style scoped>

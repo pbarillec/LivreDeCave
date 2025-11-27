@@ -210,11 +210,14 @@
             return;
         }
 
-        selectedWine.value.quantityLeft -= quantityToConsume;
-        selectedWine.value.quantityDrunk += quantityToConsume;
-        selectedWine.value.notes = comment;
+        // IMPORTANT : créer une copie du vin
+        const wineCopy = { ...selectedWine.value };
 
-        wineStore.consumeWine(selectedWine.value);
+        wineCopy.quantityLeft -= quantityToConsume;
+        wineCopy.quantityDrunk += quantityToConsume;
+        wineCopy.notes = comment;
+
+        wineStore.consumeWine(wineCopy);
         closeConsumeModal();
     }
 

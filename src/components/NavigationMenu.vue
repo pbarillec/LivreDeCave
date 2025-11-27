@@ -135,7 +135,6 @@
     );
 
     async function handleExport() {
-        console.log('Exporting wines...');
         try {
             // Ouvre la boîte de dialogue pour sélectionner l'emplacement du fichier
             const filePath = await save({
@@ -150,11 +149,8 @@
             });
 
             if (filePath) {
-                console.log('Chemin du fichier sélectionné :', filePath);
-
                 // Appelle la commande Rust pour exporter les données des vins
                 await invoke('export_wines', { filePath });
-                console.log('Vins exportés avec succès !');
             } else {
                 console.log('Aucun fichier sélectionné.');
             }
@@ -176,11 +172,7 @@
             }
 
             const fileContent = await readTextFile(filePath);
-            console.log('Contenu brut du fichier JSON :', fileContent);
-
             const response = JSON.parse(fileContent);
-            console.log('Données parsées :', response);
-
             if (!Array.isArray(response)) {
                 throw new Error(
                     'Le fichier importé ne contient pas un tableau valide.'
@@ -188,8 +180,6 @@
             }
 
             await invoke('save_wines', { wines: response });
-            console.log('Données importées et sauvegardées.');
-
             // Recharger les données dans le store
             await wineStore.loadWines();
             alert('Importation réussie.');

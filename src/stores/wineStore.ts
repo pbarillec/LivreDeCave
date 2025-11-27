@@ -6,6 +6,7 @@ import { useActionLogStore } from './useActionLogStore';
 
 export const useWineStore = defineStore('wineStore', () => {
     const wines = ref<Wine[]>([]);
+    const actionLogStore = useActionLogStore();
 
     // Charger les vins depuis le backend
     async function loadWines() {
@@ -53,7 +54,7 @@ export const useWineStore = defineStore('wineStore', () => {
         return wineTypeMap;
     }
 
-    async function addNewWine(newWine: Wine) {
+    async function addNewWine(newWine: Wine, log: boolean = true) {
         try {
             newWine.id = generateId(); // Assigne un nouvel ID unique
             newWine.quantityLeft = newWine.quantityBought; // Initialise la quantité restante
@@ -63,18 +64,29 @@ export const useWineStore = defineStore('wineStore', () => {
             // Mettre à jour directement le store
             wines.value.push(addedWine);
 
-            // Ajout aux logs
-            const actionLogStore = useActionLogStore();
-            const vintageInfo =
-                addedWine.vintage !== null ? ` (${addedWine.vintage})` : '';
+            if (log) {
+                // Enregistrement pour UNDO
+                actionLogStore.pushUndo({
+                    type: 'add',
+                    before: null,
+                    after: { ...addedWine }, // snapshot complet
+                });
 
-            actionLogStore.addLog('add', `: ${addedWine.name}${vintageInfo}`);
+                // Ecriture dans le journal d'actions
+                const vintageInfo =
+                    addedWine.vintage !== null ? ` (${addedWine.vintage})` : '';
+
+                actionLogStore.addLog(
+                    'add',
+                    `: ${addedWine.name}${vintageInfo}`
+                );
+            }
         } catch (error) {
             console.error("Erreur lors de l'ajout du vin:", error);
         }
     }
 
-    async function editWine(updatedWine: Wine) {
+    async function editWine(updatedWine: Wine, log: boolean = true) {
         try {
             const originalWine = getWineById(updatedWine.id);
             if (!originalWine) {
@@ -82,82 +94,124 @@ export const useWineStore = defineStore('wineStore', () => {
                 return;
             }
 
+            // Crée un snapshot avant modification pour UNDO
+            const beforeSnapshot = { ...originalWine };
+
+            // Mise à jour des quantités
+
             updatedWine.quantityLeft =
                 updatedWine.quantityBought - updatedWine.quantityDrunk;
+
             await invoke('update_wine', { wine: updatedWine });
             await loadWines();
 
-            const changes: string[] = [];
+            // Crée un snapshot après modification pour UNDO
+            const afterSnapshot = { ...updatedWine };
 
-            const fieldsToCompare: (keyof Wine)[] = [
-                'name',
-                'appellation',
-                'producer',
-                'color',
-                'vintage',
-                'purchaseDate',
-                'purchasePrice',
-                'bottleSize',
-                'quantityBought',
-                'quantityDrunk',
-                'peak',
-                'notes',
-                'wineType',
-                'infos',
-            ];
+            if (log) {
+                // Enregistrement pour UNDO
+                actionLogStore.pushUndo({
+                    type: 'edit',
+                    before: beforeSnapshot,
+                    after: afterSnapshot,
+                });
 
-            for (const field of fieldsToCompare) {
-                if (updatedWine[field] !== originalWine[field]) {
-                    changes.push(
-                        `${field} : "${originalWine[field]}" → "${updatedWine[field]}"`
+                // Ecriture dans le journal d'actions
+                const changes: string[] = [];
+
+                const fieldsToCompare: (keyof Wine)[] = [
+                    'name',
+                    'appellation',
+                    'producer',
+                    'color',
+                    'vintage',
+                    'purchaseDate',
+                    'purchasePrice',
+                    'bottleSize',
+                    'quantityBought',
+                    'quantityDrunk',
+                    'peak',
+                    'notes',
+                    'wineType',
+                    'infos',
+                ];
+
+                for (const field of fieldsToCompare) {
+                    if (updatedWine[field] !== originalWine[field]) {
+                        changes.push(
+                            `${field} : "${originalWine[field]}" → "${updatedWine[field]}"`
+                        );
+                    }
+                }
+
+                if (changes.length > 0) {
+                    const vintageInfo =
+                        updatedWine.vintage !== null
+                            ? ` (${updatedWine.vintage})`
+                            : '';
+
+                    actionLogStore.addLog(
+                        'edit',
+                        `: "${updatedWine.name}"${vintageInfo} :\n- ${changes.join('\n- ')}`
+                    );
+                } else {
+                    actionLogStore.addLog(
+                        'edit',
+                        `: "${updatedWine.name}" sans modification détectée.`
                     );
                 }
-            }
-
-            const actionLogStore = useActionLogStore();
-
-            if (changes.length > 0) {
-                const vintageInfo =
-                    updatedWine.vintage !== null
-                        ? ` (${updatedWine.vintage})`
-                        : '';
-
-                actionLogStore.addLog(
-                    'edit',
-                    `: "${updatedWine.name}"${vintageInfo} :\n- ${changes.join('\n- ')}`
-                );
-            } else {
-                actionLogStore.addLog(
-                    'edit',
-                    `: "${updatedWine.name}" sans modification détectée.`
-                );
             }
         } catch (error) {
             console.error('Erreur lors de l’édition du vin :', error);
         }
     }
 
-    async function consumeWine(updatedWine: Wine) {
+    async function consumeWine(updatedWine: Wine, log: boolean = true) {
         try {
+            const originalWine = getWineById(updatedWine.id);
+            if (!originalWine) {
+                console.warn('Vin introuvable pour la consommation.');
+                return;
+            }
+
+            // Crée un snapshot avant modification pour UNDO
+            const beforeSnapshot = { ...originalWine };
+
+            // Mise à jour des quantités
             updatedWine.quantityLeft =
                 updatedWine.quantityBought - updatedWine.quantityDrunk;
+
             await invoke('update_wine', { wine: updatedWine });
             await loadWines();
 
-            const actionLogStore = useActionLogStore();
-            const vintageInfo =
-                updatedWine.vintage !== null ? ` (${updatedWine.vintage})` : '';
+            // Crée un snapshot après modification pour UNDO
+            const afterSnapshot = { ...updatedWine };
 
-            actionLogStore.addLog(
-                'consume',
-                `: ${updatedWine.quantityDrunk} bouteille(s) de ${updatedWine.name}${vintageInfo}`
-            );
+            if (log) {
+                // Enregistrement pour UNDO
+                actionLogStore.pushUndo({
+                    type: 'consume',
+                    before: beforeSnapshot,
+                    after: afterSnapshot,
+                });
+
+                // Ecriture dans le journal d'actions
+                const vintageInfo =
+                    updatedWine.vintage !== null
+                        ? ` (${updatedWine.vintage})`
+                        : '';
+
+                actionLogStore.addLog(
+                    'consume',
+                    `: ${updatedWine.quantityDrunk} bouteille(s) de ${updatedWine.name}${vintageInfo}`
+                );
+            }
         } catch (error) {
             console.error('Erreur lors de la consommation du vin :', error);
         }
     }
 
-    async function deleteWine(wineId: number) {
+    async function deleteWine(wineId: number, log: boolean = true) {
         try {
             const originalWine = getWineById(wineId);
             if (!originalWine) {
@@ -165,19 +219,34 @@ export const useWineStore = defineStore('wineStore', () => {
                 return;
             }
 
+            // Crée un snapshot avant suppression pour UNDO
+            const beforeSnapshot = { ...originalWine };
+
             await invoke('delete_wine', { id: wineId });
             await loadWines(); // Recharger la liste des vins
 
-            const actionLogStore = useActionLogStore();
-            const vintageInfo =
-                originalWine.vintage !== null
-                    ? ` (${originalWine.vintage})`
-                    : '';
+            // Crée un snapshot après suppression pour UNDO
+            const afterSnapshot = null;
 
-            actionLogStore.addLog(
-                'delete',
-                ` : ${originalWine.name}${vintageInfo}`
-            );
+            if (log) {
+                // Enregistrement pour UNDO
+                actionLogStore.pushUndo({
+                    type: 'delete',
+                    before: beforeSnapshot,
+                    after: afterSnapshot,
+                });
+
+                // Ecriture dans le journal d'actions
+                const vintageInfo =
+                    originalWine.vintage !== null
+                        ? ` (${originalWine.vintage})`
+                        : '';
+
+                actionLogStore.addLog(
+                    'delete',
+                    ` : ${originalWine.name}${vintageInfo}`
+                );
+            }
         } catch (error) {
             console.error('Erreur lors de la suppression du vin:', error);
         }
@@ -211,6 +280,34 @@ export const useWineStore = defineStore('wineStore', () => {
         return wines.value.find((w) => w.id === id);
     }
 
+    async function undo() {
+        const actionLogStore = useActionLogStore();
+        const entry = actionLogStore.popUndo();
+
+        if (!entry) {
+            console.warn('Aucune action à annuler.');
+            return;
+        }
+
+        switch (entry.type) {
+            case 'add':
+                // UNDO d'un ajout = suppression du vin ajouté
+                await deleteWine(entry.after!.id, false);
+                break;
+
+            case 'delete':
+                // UNDO d'une suppression = réajouter le vin supprimé
+                await addNewWine({ ...entry.before! }, false);
+                break;
+
+            case 'edit':
+            case 'consume':
+                // UNDO d'une modification ou consommation = restaurer l'ancien état
+                await editWine({ ...entry.before! }, false);
+                break;
+        }
+    }
+
     return {
         wines,
         addNewWine,
@@ -221,5 +318,6 @@ export const useWineStore = defineStore('wineStore', () => {
         getWineTypeMap,
         loadWines,
         importWines,
+        undo,
     };
 });
