@@ -130,9 +130,10 @@
                         >Date de consommation optimale :</label
                     >
                     <input
-                        type="date"
+                        type="number"
                         v-model="editableWine.peak"
                         class="w-full border-gray-300 rounded px-3 py-2"
+                        placeholder="Ex : 2030"
                     />
                 </div>
             </div>
