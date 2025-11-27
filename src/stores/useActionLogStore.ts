@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { Wine } from '../models/Wine';
-import { remove } from '@tauri-apps/plugin-fs';
 
 interface ActionLog {
     timestamp: string;
